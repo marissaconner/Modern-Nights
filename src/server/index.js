@@ -5,6 +5,7 @@ const app = express();
 let http = require('http');
 http = http.Server(app);
 const { user, host, database, port, password } = require('../../config.js');
+const helpfileCtrl = require('./controllers/helpfilecontroller.js');
 
 const client = new Client({
   user,
@@ -18,6 +19,16 @@ client.connect();
 
 app.use(express.static(path.join(__dirname, '..', '..', 'dist')));
 app.use('/public/', express.static(path.join(__dirname, '..', 'public')));
+
+app.get('/api/helpfiles/', (req, res) => {
+  helpfileCtrl.getHelpfiles( client, (err, data) => {
+    if (err) {
+      res.status(500).error(err)
+    } else {
+      res.status(200).send(data)
+    }
+  })
+})
 
 app.get('*', (req, res) => {
   console.log("Get request recieved")
