@@ -1,14 +1,20 @@
 const express = require('express');
 const path = require('path');
+const { Client } = require('pg');
 const app = express();
 let http = require('http');
 http = http.Server(app);
+const { user, host, database, port, password } = require('../../config.js');
 
-// const { remoteServer, mushport } = require('../../config.js');
-// const io = require('socket.io');
-// var server = http.createServer();
-// server.listen(3000, 'localhost');
-// var socket = io.listen(server);
+const client = new Client({
+  user,
+  host,
+  database,
+  password,
+  port
+});
+
+client.connect();
 
 app.use(express.static(path.join(__dirname, '..', '..', 'dist')));
 app.use('/public/', express.static(path.join(__dirname, '..', 'public')));
@@ -19,7 +25,6 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', '..', 'index.html'));
 });
 
-const port = 3000;
-app.listen(port, () => {
-  console.log(`Express server listening on port ${port}`);
+app.listen(3000, () => {
+  console.log(`Express server listening on port 3000`);
  })
