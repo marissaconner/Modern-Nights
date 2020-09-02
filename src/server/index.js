@@ -18,7 +18,6 @@ client.connect();
 
 app.use(express.static(path.join(__dirname, '..', '..', 'dist')));
 app.use('/public/', express.static(path.join(__dirname, '..', 'public')));
-app.use('/lib/', express.static(path.join(__dirname, '..', '..', '..', 'node_modules')));
 
 app.get('*', (req, res) => {
   console.log("Get request recieved")
