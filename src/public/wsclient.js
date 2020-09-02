@@ -13,11 +13,9 @@ var WSClient = (function (window, document, undefined) {
   // MU* protocol carried over the WebSocket API.
   function Connection(url) {
     var that = this;
-    
     this.url = url;
     this.socket = null;
     this.isOpen = false;
-    
     Connection.reconnect(that);
   }
   
@@ -52,9 +50,10 @@ var WSClient = (function (window, document, undefined) {
 
   Connection.prototype.reconnect = function () {
     var that = this;
-    
+     
     // quit the old connection, if we have one
     if (this.isConnected()) {
+      console.log("is Connected!")
       var old = this.socket;
       this.sendText('QUIT');
       this.isOpen && setTimeout(old.close, 1000);
@@ -68,8 +67,6 @@ var WSClient = (function (window, document, undefined) {
     };
 
     this.socket.onerror = function (evt) {
-      console.log('on error event line 71')
-      console.log( evt );
       Connection.onerror(that, evt);
     };
 

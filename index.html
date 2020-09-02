@@ -13,16 +13,10 @@
       onClick="input.focus()">
 
 <div id="terminal">
-  <div id="output" class="ansi-37 ansi-40"></div>
-  <div id="quicklinks" class="ansi-1-34 ansi-40">
-    <a onClick='sendCommand("who");'>WHO</a>
-    <a onClick='sendCommand("look");'>LOOK</a>
-    <a onClick='sendCommand("inventory");'>INVENTORY</a>
-    <a onClick='sendCommand("@mail");'>MAIL</a>
-    <a onClick='sendCommand("+bb");'>BBOARD</a>
-    <a onClick='sendCommand("home");'>HOME</a>
+  <div id="output"></div>
+  <div id="quicklinks">
     <a onClick="output.clear(); cmdprompt.clear();">CLEAR OUTPUT</a></div>
-  <div id="prompt" class="ansi-37 ansi-40"></div>
+  <div id="prompt"></div>
   <textarea id="input" autocomplete="off" autofocus></textarea>
 </div>
 
@@ -64,7 +58,11 @@
   conn.onClose = function (evt) { output.appendMessage('logMessage', '%% Connection closed.' ); console.log(evt) };
 
   // handle incoming text, html, pueblo, or command prompts
-  conn.onText = function (text) { output.appendText(text); };
+  // text.replace(/\n/g, '<br/>\n')
+  conn.onText = function (text) {
+     output.appendText(text)
+  };
+  
   conn.onHTML = function (html) { output.appendHTML(html); };
   conn.onPueblo = function (html) { output.appendPueblo(html); };
   conn.onPrompt = function (text) { cmdprompt.clear(); cmdprompt.appendText(text + '\r\n'); };
