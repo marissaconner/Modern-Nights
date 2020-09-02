@@ -1,7 +1,8 @@
-const path = require('path');
-const cssPlugin = require('mini-css-extract-plugin');
+const path = require('path')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
+
 module.exports = {
-  entry: path.resolve(__dirname, 'src', 'public', 'main.jsx'),
+  entry: path.resolve(__dirname, 'src', 'main.js'),
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
@@ -9,33 +10,22 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(png|svg|jpg|gif)$/,
-        use: ['file-loader']
+        test: /\.vue$/,
+        loader: 'vue-loader',
       },
       {
-        test: /\.scss$/,
-        use: ['style-loader', 'css-loader', 'sass-loader']
-      },
-      {
-        test: /\.(js|jsx)$/,
-        exclude: [ /node_modules/, /apify_storage/],
-        loader: [{
-          loader: 'babel-loader',
-          query: {
-            presets: ['@babel/preset-react'],
-          }
-        }]
-      },
-    ],
-  },
-  mode: 'development',
-  resolve: {
-    extensions: ['.js', '.jsx'],
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: [/node_modules/],
+      }
+    ]
   },
   plugins: [
-    new cssPlugin({
-      filename:'[name].css',
-      chunkFilename: '[id].css'
-    })
-  ]
-}
+    // make sure to include the plugin!
+    new VueLoaderPlugin()
+  ],
+  mode: 'development',
+  resolve: {
+    extensions: ['.js', '.vue'],
+  },
+ }
