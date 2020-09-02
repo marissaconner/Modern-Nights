@@ -28,7 +28,17 @@ app.get('/api/helpfiles/', (req, res) => {
       res.status(200).send(data)
     }
   })
-})
+});
+
+app.get('/api/newsfiles/', (req, res) => {
+  helpfileCtrl.getRulefiles( client, (err, data) => {
+    if (err) {
+      res.status(500).error(err)
+    } else {
+      res.status(200).send(data)
+    }
+  })
+});
 
 app.get('*', (req, res) => {
   console.log("Get request recieved")

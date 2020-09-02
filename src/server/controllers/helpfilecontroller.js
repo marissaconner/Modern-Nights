@@ -1,11 +1,22 @@
 module.exports = {
   getHelpfiles: function(client, callback) {
-    const query = 'select array(select distinct category from helpfiles_help where staff_only is not true) as categories';
-    client.query(query, (err, data) => {
+    const queryString = `select category, array_to_string(array_agg(name), ',') as entries from helpfiles where bucket='help' group by category order by category asc`;
+    client.query(queryString, (err, data) => {
       if (err) {
         callback(err, null);
       } else {
-        callback(null, data.rows[0])
+        callback(null, data.rows)
+      }
+    })
+  },
+
+   getRulefiles: function(client, callback) {
+    const queryString = `select category, array_to_string(array_agg(name), ',') as entries from helpfiles where bucket='rules' group by category order by category asc`;
+    client.query(queryString, (err, data) => {
+      if (err) {
+        callback(err, null);
+      } else {
+        callback(null, data.rows)
       }
     })
   }
