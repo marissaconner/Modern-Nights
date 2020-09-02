@@ -1,21 +1,11 @@
-// import io from 'socket.io-client';
-// import {remoteServer, mushport} from '../../config.js';
-console.log("Yaateeh!")
-// var socket = io( `wss://${remoteServer}:1777/wsclient` );
+import Vue from 'vue';
+import App from "./components/App.vue"
 
-// /*
-// 1777 goes connection refused.
-// 443 goes 'corsblockage', as does 80.
-// */
-
-// socket.on('connect', () => {
-//   console.log('You have connected!'); // This will log to the browser's console, not the terminal
-// });
-
-// socket.on('message', (message) => {
-//   console.log('Something came along on the "message" channel:', message);
-// });
-
-// socket.on('error', (message) => {
-//   console.log('Error:', message);
-// });
+// That is typically your root Vue instance that the rest
+// of the application descends from. 
+// This hangs off the root element declared in an html document.
+let vm = new Vue({
+  el: '#app',
+  render: h => h(App),
+  component: App
+})
