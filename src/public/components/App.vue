@@ -2,15 +2,15 @@
   <div id="app">
   <h1>Helpfiles</h1>
   <ul>
-  <li v-for="helpfile in helpfiles">
-    {{ helpfile.category }}
-    <ul v-for="entry in helpfile.entries">
-      <li>
-        {{ entry }}
-      </li>
-    </ul>
-  </li>
-  
+    <li v-for="helpfile in helpfiles">
+      <h2>{{ helpfile.category }}</h2>
+     <ul v-for="entry in helpfile.entries">
+        <li>
+          <h3>{{ entry.name }}</h3>
+          <div v-html="entry.contents" />
+        </li>
+      </ul>
+    </li>
   </ul>
   </div>
 </template>
@@ -27,7 +27,6 @@ import axios from 'axios';
         helpfiles: {}
       }
     },
-
     created() {
        axios.get('/api/helpfiles')
       .then(res => this.helpfiles = res.data)
