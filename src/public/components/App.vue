@@ -53,3 +53,10 @@
     }
   }
 </script>
+
+<style>
+  .dekedickerson {
+    color: red;
+  }
+  }
+</style>
