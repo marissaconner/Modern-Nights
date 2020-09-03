@@ -4,7 +4,7 @@ const { Client } = require('pg');
 const app = express();
 let http = require('http');
 http = http.Server(app);
-const { user, host, database, port, password } = require('../../config.js');
+const { user, host, database, port, password } = require('./config.js');
 const helpfileCtrl = require('./controllers/helpfilecontroller.js');
 
 const client = new Client({
