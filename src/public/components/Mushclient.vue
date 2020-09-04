@@ -1,6 +1,6 @@
 <template>
   <div class="client">
-    <div class="client__buffer">
+    <div class="client__buffer neu__element--inset">
       <div id="client__scroller">
         <div class="client__messages" v-for="message in messageBuffer">
           <span v-html="message" /> 
@@ -115,7 +115,6 @@ import axios from 'axios';
   .client__buffer {
     max-height: 450px;
     overflow-y: scroll;
-    outline: 1px solid red;
   }
 
   #client__scroller * {

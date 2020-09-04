@@ -60,4 +60,18 @@
     height: 100%;
     max-height: 100%;
   }
+
+  .neu__element--inset {
+    background: linear-gradient(145deg, transparent, #fafafa);
+    box-shadow: inset 2px 2px 4px rgba(0, 64, 64, 0.35),
+                inset -3px -3px 4px rgba(255,255,255,0.35);
+    transition: all .25s ease-in-out;
+  }
+
+  .neu__element--outset {
+    background: linear-gradient(145deg, transparent, #fafafa);
+    box-shadow: 3px 3px 4px rgba(0, 64, 64, 0.35),
+                -3px -3px 4px rgba(255,255,255,0.35);
+    transition: all .25s ease-in-out;
+  }
 </style>
