@@ -1,6 +1,6 @@
 <template>
   <div>
-  <ul>
+  <ul class="example">
     <li v-for="stat in attributes.physical">
       {{stat.name}}
       <input 
@@ -55,5 +55,5 @@
 </script>
 
 <style>
-  .example { color: red }
+  .example { color: blue }
 </style>
