@@ -39,7 +39,7 @@ import WSClient from '../wsclient.js';
     methods: {
       handleKeyup: function(e) {
         if( e.keyCode === 13 ) {
-          console.log('Enter was pressed')
+          this.sendMessage()
         }
         if( e.keyCode === 38 ) {
           console.log('Key up')
