@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
   <h1>Helpfiles</h1>
   <ul>
     <li v-for="helpfile in helpfiles">

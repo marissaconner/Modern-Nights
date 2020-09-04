@@ -1,5 +1,6 @@
 <template>
   <div>
+  <Mushclient />
   <ul class="example">
     <li v-for="stat in attributes.physical">
       {{stat.name}}
@@ -24,10 +25,10 @@
   // import Component from 'filepath';
   // The export default syntax is declaring a component 
   // which can be registered and reused later.
-
+  import Mushclient from './Mushclient.vue'
   export default {
     name: 'App',
-    components: {},
+    components: { Mushclient},
     data () {
       return {
         attributes: {

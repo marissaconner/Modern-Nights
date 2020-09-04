@@ -9,9 +9,10 @@
   <title>Modern Nights</title>
 </head>
 
-<body onLoad="input.focus()"
-      onUnload="conn.sendText('QUIT'); setTimeout(conn.close, 1000);"
-      onClick="input.focus()">
+<body> 
+<!-- onLoad="input.focus()"
+  onUnload="conn.sendText('QUIT'); setTimeout(conn.close, 1000);"
+  onClick="input.focus()">
 
   <div id="terminal">
     <div id="output"></div>
@@ -78,10 +79,9 @@
     input.onEnter = function(cmd) { sendCommand(cmd); };
     
     // escape key passthrough from WSClient.pressKey
-    input.onEscape = function () { this.clear(); };
+    input.onEscape = function () { this.clear(); }; 
     
-  </script>
-  <div class="example">Deeeeke</div>
+  </script> --> 
   <div id="app"></div>
   <script src="bundle.js"></script>
 
