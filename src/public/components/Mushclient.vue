@@ -4,6 +4,9 @@
     <div v-for="message in messageBuffer">
       {{message}}
     </div>
+
+    <textarea v-model="input" />
+    <span @click=sendMessage>send</span>
   </div>
 </template>
 
@@ -19,7 +22,8 @@ import WSClient from '../wsclient.js';
       return {
         messageBuffer: ["This is a message!"],
         isOpen: false,
-        socket: null
+        socket: null,
+        input: ""
       }
     },
     created() {
@@ -34,8 +38,10 @@ import WSClient from '../wsclient.js';
       isConnected: function() {
         return (this.socket && this.isOpen && (this.socket.readyState === 1));
       },
-      sendText: function(text) {
-
+      sendMessage: function() {
+        if( this.input.length > 0 ) {
+          this.socket.send('t' + this.input + '\r\n');
+        }
       },
       handleMessage: function(event) {
         this.messageBuffer.push(evt.data);
@@ -54,7 +60,7 @@ import WSClient from '../wsclient.js';
         this.isOpen = false;
 
         this.socket.onopen = function(evt) {
-          console.log(evt);
+          component.messageBuffer.push("Connecting...")
         };
 
         this.socket.onerror = function (evt) {
