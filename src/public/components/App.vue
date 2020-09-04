@@ -1,6 +1,12 @@
 <template>
   <div class="container">
-  <Mushclient />
+    <div class="row">
+      <Mushclient />
+      <div class="sidebar">
+        <Helpfiles />
+      </div>
+    </div>
+  
   <ul class="example">
     <li v-for="stat in attributes.physical">
       {{stat.name}}
@@ -26,9 +32,11 @@
   // The export default syntax is declaring a component 
   // which can be registered and reused later.
   import Mushclient from './Mushclient.vue'
+  import Helpfiles from './Helpfiles.vue'
+
   export default {
     name: 'App',
-    components: { Mushclient},
+    components: { Mushclient, Helpfiles },
     data () {
       return {
         attributes: {
@@ -63,15 +71,28 @@
     --lowlight: #111;
     --highlight: #555;
     --text: #ccc;
+    --text-lighter: #eee;
     --buttonbg: #175f8a;
     --buttonbg-hover: #1a6b9b;
   }
 
+  .row {
+    display: flex;
+    flex-direction: row;
+    align-items: space-between;
+  }
+
   body, html {
+    letter-spacing: .5px;
     height: 100%;
     max-height: 100%;
     background-color: var(--main-bg);
     color: var(--text);
+    font-family: "Montserrat", sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text-lighter);
   }
 
   input[type=text], textarea {
@@ -96,6 +117,11 @@
 
   .button--block {
     display: block; 
+  }
+
+  .sidebar {
+    max-width: 320px;
+    padding: 1em;
   }
 
   .neu__element--inset {

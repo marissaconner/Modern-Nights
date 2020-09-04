@@ -5,11 +5,85 @@
 <link rel="stylesheet" href="style.css"> -->
 <base target="_blank">
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
   <title>Modern Nights</title>
 </head>
 
 <body> 
+<!-- onLoad="input.focus()"
+  onUnload="conn.sendText('QUIT'); setTimeout(conn.close, 1000);"
+  onClick="input.focus()">
+
+  <div id="terminal">
+    <div id="output"></div>
+    <div id="quicklinks">
+      <a onClick="output.clear(); cmdprompt.clear();">CLEAR OUTPUT</a></div>
+    <div id="prompt"></div>
+    <textarea id="input" autocomplete="off" autofocus></textarea>
+  </div>
+
+  <script type="text/javascript">
+    //var serverAddress = window.location.hostname;
+    var serverAddress = "jetownersanonymous.com";
+    var serverSSL = window.location.protocol == "https:";
+    var serverProto = serverSSL ? "wss://" : "ws://";
+    var serverPort = serverSSL ? '1777' : '1777';
+    
+    var customUrl = window.location.search.substring(1) ? window.location.search.substring(1) : serverAddress + ":" + serverPort;
+
+    // The connection URL is ws://host:port/wsclient (or wss:// for SSL connections)
+    var serverUrl = serverProto + customUrl + '/wsclient'
+
+    // define the input box, output terminal, and network connection
+    var output = WSClient.output(document.getElementById('output'));
+    var cmdprompt = WSClient.output(document.getElementById('prompt'));
+    var input = WSClient.input(document.getElementById('input'));
+    var conn = WSClient.connect(serverUrl);
+
+    // function to send a command string to the server
+    function sendCommand(cmd) {
+      if (conn.isConnected()) {
+        if (cmd !== '') {
+          conn.sendText(cmd);
+          output.appendMessage('localEcho', cmd);
+        }
+      } else {
+        // connection was broken, let's reconnect
+        conn.reconnect();
+        output.appendMessage('logMessage', '%% Reconnecting to server...');
+      }
+    }
+    
+    // just log a standard message on these socket status events
+    conn.onOpen = function (evt) { output.appendMessage('logMessage', '%% Connected.'); };
+    conn.onError = function (evt) { output.appendMessage('logMessage', '%% Connection error!'); console.log(evt); };
+    conn.onClose = function (evt) { output.appendMessage('logMessage', '%% Connection closed.' ); console.log(evt) };
+
+    // handle incoming text, html, pueblo, or command prompts
+    // text.replace(/\n/g, '<br/>\n')
+    conn.onText = function (text) {
+       output.appendText(text)
+    };
+
+    conn.onHTML = function (html) { output.appendHTML(html); };
+    conn.onPueblo = function (html) { output.appendPueblo(html); };
+    conn.onPrompt = function (text) { cmdprompt.clear(); cmdprompt.appendText(text + '\r\n'); };
+    
+    // handle incoming JSON objects. requires server specific implementation
+    conn.onObject = function (obj) { console.log('unhandled JSON object' + obj); };
+
+    // pueblo command links, prompt for user input and replace ?? token if present
+    output.onCommand = function(cmd) { sendCommand(WSClient.parseCommand(cmd)); };
+
+    // enter key passthrough from WSClient.pressKey
+    input.onEnter = function(cmd) { sendCommand(cmd); };
+    
+    // escape key passthrough from WSClient.pressKey
+    input.onEscape = function () { this.clear(); }; 
+    
+  </script> --> 
   <div id="app"></div>
   <script src="bundle.js"></script>
+
 </body>
 </html>

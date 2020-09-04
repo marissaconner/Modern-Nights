@@ -18,6 +18,7 @@
 
 <script>
 import axios from 'axios';
+var Convert = require('ansi-to-html');
 
 // The export default syntax is declaring a component 
 // which can be registered and reused later.
@@ -34,7 +35,6 @@ import axios from 'axios';
       }
     },
     created() {
-
       const serverSSL = window.location.protocol == "https:";
       const serverProto = serverSSL ? "wss://" : "ws://";
       const serverUrl = `${serverProto}jetownersanonymous.com:1777/wsclient`;
@@ -84,6 +84,7 @@ import axios from 'axios';
 
         this.socket = new window.WebSocket(url);
         this.isOpen = false;
+        this.converter = new Convert();    
 
         this.socket.onopen = function(evt) {
           component.messageBuffer.push("Connecting...")
@@ -99,10 +100,13 @@ import axios from 'axios';
 
         this.socket.onmessage = function(evt) {
           let prepend = evt.data.charAt(0);
+
           if( prepend !== 'p') {
-            let messageText = evt.data.slice(1).replace(/[\n\r]/g, '<br />');;
+            let messageText = evt.data.slice(1).replace(/[\n\r]/g, '<br />');
+            messageText = component.converter.toHtml(messageText);
             component.messageBuffer.push(messageText);
-          }
+          } 
+          console.log( evt.data);
         }
       }
     }
@@ -112,7 +116,7 @@ import axios from 'axios';
 <style>
   .client {
     max-height: 650px;
-    font-family: 'Courier Prime';
+    font-family: 'Courier Prime', monospace;
     flex-direction: column;
   }
 
