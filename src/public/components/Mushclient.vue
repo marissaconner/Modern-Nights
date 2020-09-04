@@ -42,7 +42,10 @@ import WSClient from '../wsclient.js';
           this.sendMessage()
         }
         if( e.keyCode === 38 ) {
-          console.log('Key up')
+          if( this.historyIndex < this.inputHistory.length  ) {
+            this.input = this.inputHistory[this.historyIndex];
+            this.historyIndex += 1;
+          }
         }
         if( e.keyCode === 40 ) {
           console.log('Key down')
