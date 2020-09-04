@@ -55,8 +55,5 @@
 </script>
 
 <style>
-  .dekedickerson {
-    color: red;
-  }
-  }
+  .example { color: red }
 </style>
