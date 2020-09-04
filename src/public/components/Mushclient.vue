@@ -1,6 +1,9 @@
 <template>
   <div>
     <P>Client</p>
+    <div v-for="message in messageBuffer">
+      {{message}}
+    </div>
   </div>
 </template>
 
@@ -14,6 +17,7 @@ import WSClient from '../wsclient.js';
     name: 'Mushclient',
     data () {
       return {
+        messageBuffer: ["This is a message!"],
         isOpen: false,
         socket: null
       }
@@ -33,7 +37,12 @@ import WSClient from '../wsclient.js';
       sendText: function(text) {
 
       },
+      handleMessage: function(event) {
+        this.messageBuffer.push(evt.data);
+      },
       connect: function(url) {
+        let component = this;
+
         if (this.isConnected()) {
           console.log("is Connected!")
           var old = this.socket;
@@ -56,9 +65,9 @@ import WSClient from '../wsclient.js';
           console.log(evt);
         };
 
-        this.socket.onmessage = function (evt) {
-          console.log(evt);
-        };
+        this.socket.onmessage = function(evt) {
+          component.messageBuffer.push(evt.data)
+        }
 
       }
     }
