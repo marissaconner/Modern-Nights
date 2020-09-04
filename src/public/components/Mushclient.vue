@@ -1,17 +1,23 @@
 <template>
   <div class="client">
-    <div class="client__message" v-for="message in messageBuffer">
-      {{message}}
+    <div class="client__buffer">
+      <div id="client__scroller">
+        <div class="client__messages" v-for="message in messageBuffer">
+          <span v-html="message" /> 
+        </div>
+        <div id="client__anchor"></div>
+      </div>
     </div>
 
-    <textarea v-on:keyup="handleKeyup" v-model="input" />
-    <span @click=sendMessage>send</span>
+    <div class="client__input">
+      <textarea v-on:keyup="handleKeyup" v-model="input" />
+      <span @click=sendMessage>send</span>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-import WSClient from '../wsclient.js';
 
 // The export default syntax is declaring a component 
 // which can be registered and reused later.
@@ -92,8 +98,8 @@ import WSClient from '../wsclient.js';
         };
 
         this.socket.onmessage = function(evt) {
-          console.log(evt.data.replace(/[\n\r]t/g, ''));
-          component.messageBuffer.push(evt.data)
+          let messageText = evt.data.slice(1).replace(/[\n\r]/g, '<br />');;
+          component.messageBuffer.push(messageText);
         }
       }
     }
@@ -101,13 +107,27 @@ import WSClient from '../wsclient.js';
 </script>
 
 <style>
-
   .client {
-    display: flex;
-    flex-direction: column;
+    max-height: 500px;
     font-family: 'Courier Prime';
   }
+
+  .client__buffer {
+    max-height: 450px;
+    overflow-y: scroll;
+    outline: 1px solid red;
+  }
+
+  #client__scroller * {
+    overflow-anchor: none;
+  }
+
+  #client__anchor {
+   overflow-anchor: auto;
+   height: 1px;
+  }
+
   .client__message {
-    margin: .5em;
+    margin: .25em;
   }
 </style>

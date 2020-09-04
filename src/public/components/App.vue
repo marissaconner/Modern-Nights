@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
   <Mushclient />
   <ul class="example">
     <li v-for="stat in attributes.physical">
@@ -56,5 +56,8 @@
 </script>
 
 <style>
-  .example { color: blue }
+  body, html {
+    height: 100%;
+    max-height: 100%;
+  }
 </style>
