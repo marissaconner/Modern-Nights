@@ -1,7 +1,6 @@
 <template>
-  <div>
-    <P>Client</p>
-    <div v-for="message in messageBuffer">
+  <div class="client">
+    <div class="client__message" v-for="message in messageBuffer">
       {{message}}
     </div>
 
@@ -96,10 +95,19 @@ import WSClient from '../wsclient.js';
           console.log(evt.data.replace(/[\n\r]t/g, ''));
           component.messageBuffer.push(evt.data)
         }
-
       }
     }
   }
-
-
 </script>
+
+<style>
+
+  .client {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Courier Prime';
+  }
+  .client__message {
+    margin: .5em;
+  }
+</style>
