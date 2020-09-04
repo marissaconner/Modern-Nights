@@ -56,27 +56,59 @@
 </script>
 
 <style>
+  :root {
+    --main-bg: #333;
+    --main-bg-darker: #222;
+    --main-bg-lighter: #444; 
+    --lowlight: #111;
+    --highlight: #555;
+    --text: #ccc;
+    --buttonbg: #175f8a;
+    --buttonbg-hover: #1a6b9b;
+  }
+
   body, html {
     height: 100%;
     max-height: 100%;
+    background-color: var(--main-bg);
+    color: var(--text);
   }
 
   input[type=text], textarea {
     border-radius: 5px;
     padding: 5px;
+    color: var(--text);
+  }
+
+  .button, button {
+    border-radius: 5px;
+    text-align: center;
+    background-color: var(--buttonbg);
+    color: var(--text);
+    padding: .5em;
+    cursor: pointer;
+    cursor: hand;
+  }
+
+  .button:hover, button:hover {
+    background-color: var(--buttonbg-hover);
+  }
+
+  .button--block {
+    display: block; 
   }
 
   .neu__element--inset {
-    background: linear-gradient(145deg, transparent, #fafafa);
-    box-shadow: inset 2px 2px 4px rgba(0, 64, 64, 0.35),
-                inset -3px -3px 4px rgba(255,255,255,0.35);
+    background: linear-gradient(145deg, transparent, var(--main-bg-darker));
+    box-shadow: inset 2px 2px 4px var(--lowlight),
+                inset -3px -3px 4px var(--highlight);
     transition: all .25s ease-in-out;
   }
 
   .neu__element--outset {
-    background: linear-gradient(145deg, transparent, #fafafa);
-    box-shadow: 3px 3px 4px rgba(0, 64, 64, 0.35),
-                -3px -3px 4px rgba(255,255,255,0.35);
+    background: linear-gradient(145deg, transparent, var(--main-bg-darker));
+    box-shadow: 3px 3px 4px var(--lowlight),
+                -3px -3px 4px var(--highlight);
     transition: all .25s ease-in-out;
   }
 </style>

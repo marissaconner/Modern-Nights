@@ -11,7 +11,7 @@
 
     <div class="client__input">
       <textarea class="neu__element--inset" v-on:keyup="handleKeyup" v-model="input" />
-      <span @click=sendMessage>send</span>
+      <span class="button button--block" @click=sendMessage>send</span>
     </div>
   </div>
 </template>
@@ -111,7 +111,6 @@ import axios from 'axios';
 
 <style>
   .client {
-    outline: 1px solid red;
     max-height: 650px;
     font-family: 'Courier Prime';
     flex-direction: column;
@@ -138,23 +137,10 @@ import axios from 'axios';
     margin: .5em 0;
   }
 
-  .client__input span {
-    display: block;
-    border-radius: 5px;
-    text-align: center;
-    color: #ffffff;
-    background-color: #4580ba;
-    padding: .5em;
-  }
-
-  .client__input span:hover {
-    background-color: #588dc1;
-  }
-
    .client__input textarea:focus {
     outline: none;
     border: none;
-    background: #ffffff;
+    background: var(--main-bg-lighter);
   }
 
   #client__scroller * {
