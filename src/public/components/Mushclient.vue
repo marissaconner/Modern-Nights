@@ -10,7 +10,7 @@
     </div>
 
     <div class="client__input">
-      <textarea v-on:keyup="handleKeyup" v-model="input" />
+      <textarea class="neu__element--inset" v-on:keyup="handleKeyup" v-model="input" />
       <span @click=sendMessage>send</span>
     </div>
   </div>
@@ -98,8 +98,11 @@ import axios from 'axios';
         };
 
         this.socket.onmessage = function(evt) {
-          let messageText = evt.data.slice(1).replace(/[\n\r]/g, '<br />');;
-          component.messageBuffer.push(messageText);
+          let prepend = evt.data.charAt(0);
+          if( prepend !== 'p') {
+            let messageText = evt.data.slice(1).replace(/[\n\r]/g, '<br />');;
+            component.messageBuffer.push(messageText);
+          }
         }
       }
     }
@@ -108,13 +111,50 @@ import axios from 'axios';
 
 <style>
   .client {
-    max-height: 500px;
+    outline: 1px solid red;
+    max-height: 650px;
     font-family: 'Courier Prime';
+    flex-direction: column;
   }
 
   .client__buffer {
-    max-height: 450px;
+    padding: 1em;
+    max-height: 400px;
     overflow-y: scroll;
+    border-radius: 5px;
+  }
+
+  .client__input {
+    width: 100%;
+    height: 100px;
+  }
+
+  .client__input textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px;
+    margin: 0;
+    border: none;
+    margin: .5em 0;
+  }
+
+  .client__input span {
+    display: block;
+    border-radius: 5px;
+    text-align: center;
+    color: #ffffff;
+    background-color: #4580ba;
+    padding: .5em;
+  }
+
+  .client__input span:hover {
+    background-color: #588dc1;
+  }
+
+   .client__input textarea:focus {
+    outline: none;
+    border: none;
+    background: #ffffff;
   }
 
   #client__scroller * {

@@ -61,6 +61,11 @@
     max-height: 100%;
   }
 
+  input[type=text], textarea {
+    border-radius: 5px;
+    padding: 5px;
+  }
+
   .neu__element--inset {
     background: linear-gradient(145deg, transparent, #fafafa);
     box-shadow: inset 2px 2px 4px rgba(0, 64, 64, 0.35),
