@@ -48,7 +48,10 @@ import WSClient from '../wsclient.js';
           }
         }
         if( e.keyCode === 40 ) {
-          console.log('Key down')
+          if( this.historyIndex > 0 ) {
+            this.input = this.inputHistory[this.historyIndex-1];
+            this.historyIndex -= 1;    
+          }
         }
       }, 
       isConnected: function() {
