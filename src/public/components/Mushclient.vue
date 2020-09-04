@@ -5,7 +5,7 @@
       {{message}}
     </div>
 
-    <textarea v-model="input" />
+    <textarea v-on:keyup="handleKeyup" v-model="input" />
     <span @click=sendMessage>send</span>
   </div>
 </template>
@@ -20,7 +20,9 @@ import WSClient from '../wsclient.js';
     name: 'Mushclient',
     data () {
       return {
-        messageBuffer: ["This is a message!"],
+        historyIndex: 0,
+        inputHistory: [],
+        messageBuffer: [],
         isOpen: false,
         socket: null,
         input: ""
@@ -35,12 +37,25 @@ import WSClient from '../wsclient.js';
 
     },
     methods: {
+      handleKeyup: function(e) {
+        if( e.keyCode === 13 ) {
+          console.log('Enter was pressed')
+        }
+        if( e.keyCode === 38 ) {
+          console.log('Key up')
+        }
+        if( e.keyCode === 40 ) {
+          console.log('Key down')
+        }
+      }, 
       isConnected: function() {
         return (this.socket && this.isOpen && (this.socket.readyState === 1));
       },
       sendMessage: function() {
         if( this.input.length > 0 ) {
           this.socket.send('t' + this.input + '\r\n');
+          this.inputHistory.unshift(this.input);
+          this.input = "";
         }
       },
       handleMessage: function(event) {
@@ -64,14 +79,15 @@ import WSClient from '../wsclient.js';
         };
 
         this.socket.onerror = function (evt) {
-          console.log(evt);
+          component.messageBuffer.push(evt);
         };
 
         this.socket.onclose = function (evt) {
-          console.log(evt);
+          component.messageBuffer.push("Connection closed.");
         };
 
         this.socket.onmessage = function(evt) {
+          console.log(evt.data.replace(/[\n\r]t/g, ''));
           component.messageBuffer.push(evt.data)
         }
 
