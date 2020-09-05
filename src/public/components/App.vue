@@ -75,7 +75,7 @@
     --buttonbg: #175f8a;
     --buttonbg-hover: #1a6b9b;
   }
-
+  
   .row {
     display: flex;
     flex-direction: row;

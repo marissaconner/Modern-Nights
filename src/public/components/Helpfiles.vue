@@ -1,10 +1,10 @@
 <template>
   <div>
   <h1>Helpfiles</h1>
-  <ul>
+  <ul class="newsfiles">
     <li v-for="helpfile in helpfiles">
       <h2>{{ helpfile.category }}</h2>
-     <ul v-for="entry in helpfile.entries">
+     <ul class="newsfiles" v-for="entry in helpfile.entries">
         <li>
           <h3>{{ entry.name }}</h3>
           <div v-html="entry.contents" />
@@ -33,3 +33,13 @@ import axios from 'axios';
     }
   }
 </script>
+
+<style scoped>
+  .newsfiles {
+    padding-inline-start: 0px; 
+  }
+    
+  ul li {
+    list-style-type: none;
+  }
+</style>
