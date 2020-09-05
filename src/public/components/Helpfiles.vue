@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="newsfiles">
   <h1>Helpfiles</h1>
-  <ul class="newsfiles">
+  <ul class="newsfiles__list">
     <li v-for="helpfile in helpfiles">
       <h2>{{ helpfile.category }}</h2>
-     <ul class="newsfiles" v-for="entry in helpfile.entries">
+     <ul class="newsfiles__list" v-for="entry in helpfile.entries">
         <li>
           <h3>{{ entry.name }}</h3>
           <div v-html="entry.contents" />
@@ -36,6 +36,10 @@ import axios from 'axios';
 
 <style scoped>
   .newsfiles {
+    margin: 1em;
+  }
+  
+  .newsfiles__list {
     padding-inline-start: 0px; 
   }
     

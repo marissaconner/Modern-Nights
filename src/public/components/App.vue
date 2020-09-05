@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div class="row">
-      <Mushclient />
-      <div class="sidebar">
+      <Mushclient class="twothirds"/>
+      <div class="sidebar third">
         <Helpfiles />
       </div>
     </div>
@@ -75,7 +75,11 @@
     --buttonbg: #175f8a;
     --buttonbg-hover: #1a6b9b;
   }
-  
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
   .row {
     display: flex;
     flex-direction: row;
@@ -101,6 +105,14 @@
     color: var(--text);
   }
 
+  .third {
+    width: 33%
+  }
+
+  .twothirds {
+    width: 66%
+  }
+
   .button, button {
     border-radius: 5px;
     text-align: center;
@@ -117,11 +129,6 @@
 
   .button--block {
     display: block; 
-  }
-
-  .sidebar {
-    max-width: 320px;
-    padding: 1em;
   }
 
   .neu__element--inset {
