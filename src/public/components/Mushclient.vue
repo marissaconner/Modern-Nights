@@ -102,8 +102,16 @@ var Convert = require('ansi-to-html');
           let prepend = evt.data.charAt(0);
 
           if( prepend !== 'p') {
-            let messageText = evt.data.slice(1).replace(/[\n\r]/g, '<br />');
+            let messageText = evt.data.slice(1);
+            // Escaping < and > 
+            messageText = messageText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');            
+            
+            // Converting carriage returns
+            messageText = messageText.replace(/[\n\r]/g, '<br />');
+
+            // Enabling ansi          
             messageText = component.converter.toHtml(messageText);
+           
             component.messageBuffer.push(messageText);
           } 
           console.log( evt.data);
