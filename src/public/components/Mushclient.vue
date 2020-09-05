@@ -3,7 +3,7 @@
     <div class="client__buffer neu__element--inset">
       <div id="client__scroller">
         <div class="client__messages" v-for="message in messageBuffer">
-          <span v-html="message" /> 
+          <pre v-html="message" /> 
         </div>
         <div id="client__anchor"></div>
       </div>
@@ -107,7 +107,7 @@ var Convert = require('ansi-to-html');
             messageText = messageText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');            
             
             // Converting carriage returns
-            messageText = messageText.replace(/[\n\r]/g, '<br />');
+           // messageText = messageText.replace(/[\n\r]/g, '<br />');
 
             // Enabling ansi          
             messageText = component.converter.toHtml(messageText);
@@ -123,14 +123,30 @@ var Convert = require('ansi-to-html');
 
 <style>
   .client {
-    max-height: 650px;
+    width: 800px;
+    max-width: 800px;
+    height: 600px;
+    max-height: 720px;
     font-family: 'Courier Prime', monospace;
     flex-direction: column;
   }
 
+  .client pre {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
+  }
+
   .client__buffer {
     padding: 1em;
-    max-height: 400px;
+    height: 100%;
+    max-height:100%;
     overflow-y: scroll;
     border-radius: 5px;
   }
@@ -165,6 +181,6 @@ var Convert = require('ansi-to-html');
   }
 
   .client__message {
-    margin: .25em;
+    margin: 0;
   }
 </style>
