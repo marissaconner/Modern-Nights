@@ -39,7 +39,6 @@ th [if(not(hasattr(v(bigref),db`sheet)),[set(v(bigref),db`sheet:[setr(cg,create(
 @@ Globals are stored on a different objet from functions for faster lookup.
 th [if(not(hasattr(v(bigref),db`sheetcmds)),[set(v(bigref),db`sheetcmds:[setr(cg,create(GLOBALS: Character Sheets))])][parent(r(sheet),v(bigref))])][set(me,sheetglobal:[get(v(bigref)/db`sheetcmds)])]
 
-
 @@ Establish a consistent means of reference to the Miscellaneous Globals DBREF.
 th [if(not(hasattr(v(bigref),db`misc)),[set(v(bigref),db`misc:[setr(misc,create(FUNCTIONS: Miscellaneous Globals))])][parent(r(misc),v(bigref))])][set(me,miscglobal:[get(v(bigref)/db`misc)])]
 
