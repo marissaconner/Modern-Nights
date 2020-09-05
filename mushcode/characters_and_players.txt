@@ -1,0 +1,189 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@
+@@ PLAYERS AND ALTS
+@@ This package installs a characters table and a players table.
+@@ Stat systems are installed separately!
+@@
+@@
+@@ MUSH Commands provided:
+@@ +register <email address> - A player can type this to create a new character.
+@@ +alts - A player can type this to see their alts. 
+@@ +alts <character name> - A staffer can type this to see someone's alts. 
+@@ +staff/add <screen name> - A staffer can type this to add someone to staff.
+@@ +staff/remove <screen name> - A staffer can type this to remove someone from staff.
+@@ +staff - this command lists staff accounts.
+@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ 
+@@  SETUP
+@@
+@@ SQL Access Object - responsible for all SQL stuff
+@@ Character Sheet Object & Global: all +sheet, +stat, alts cmds
+@@ Miscellaneous Global: For commands like +staff, +staff/add|remove 
+@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+@@ Ensure consistent references to objects by looking for an object that stores all the DBREFs.
+th [if(not(hasattr(me,bigref)), [set(me,bigref:[create(BIGREF: Batty's Big Reference Object)])][set(v(bigref),describe:This reference object holds the DBREFs of objects that have been installed via Batty's WODMUSH code.)])]
+
+@@ Establish a consistent means of reference to the SQL Access Object's DBREF.  This will be set as an attribute on the person copypastaing this into the MUSH, so all future things are put on the same item.
+th [if(not(hasattr(v(bigref),db`sql)),[set(v(bigref),db`sql:[setr(sql,create(FUNCTIONS: SQL Access))])][parent(r(sql),v(bigref))])][set(me,sqldbref:[get(v(bigref)/db`sql)])]
+
+@@ Establish a consistent means of reference to the Character Sheet Functions DBREF.
+th [if(not(hasattr(v(bigref),db`sheet)),[set(v(bigref),db`sheet:[setr(cg,create(FUNCTIONS: Character Sheets))])][parent(r(sheet),v(bigref))])][set(me,sheetfuncs:[get(v(bigref)/db`sheet)])]
+
+@@ Establish a consistent means of reference to the Character Sheet Globals DBREF.
+@@ Globals are stored on a different objet from functions for faster lookup.
+th [if(not(hasattr(v(bigref),db`sheetcmds)),[set(v(bigref),db`sheetcmds:[setr(cg,create(GLOBALS: Character Sheets))])][parent(r(sheet),v(bigref))])][set(me,sheetglobal:[get(v(bigref)/db`sheetcmds)])]
+
+
+@@ Establish a consistent means of reference to the Miscellaneous Globals DBREF.
+th [if(not(hasattr(v(bigref),db`misc)),[set(v(bigref),db`misc:[setr(misc,create(FUNCTIONS: Miscellaneous Globals))])][parent(r(misc),v(bigref))])][set(me,miscglobal:[get(v(bigref)/db`misc)])]
+
+th [set( v(sheetglobal),va:[v(sheetfuncs)] )]
+@set sheetfuncs = wizard
+
+@@
+@@ Schema
+@@
+
+&SCHEMA`CHARACTERS [v(sqlDBREF)] = CREATE TABLE IF NOT EXISTS characters (id SERIAL PRIMARY KEY, dbref text, current_xp double precision, total_xp double precision, monster_id integer, approved integer, deactivated integer, staff boolean)
+
+&SCHEMA`PLAYERS [v(sqlDBREF)] = CREATE TABLE IF NOT EXISTS players (id SERIAL PRIMARY KEY, register_email TEXT, session_hash VARCHAR, password VARCHAR); ALTER TABLE PLAYERS DROP CONSTRAINT IF EXISTS unique_register_email; ALTER TABLE players ADD CONSTRAINT unique_register_email UNIQUE (register_email);
+
+&SCHEMA`CHARACTERS_PLAYERS [v(sqlDBREF)] = create table if not exists bridge_characters_players ( id serial primary key, character_id int, player_id int ); alter table bridge_characters_players drop constraint if exists fk_character_id; alter table bridge_characters_players drop constraint if exists fk_player_id; alter table bridge_characters_players add constraint fk_character_id foreign key (character_id) references characters (id) ON DELETE CASCADE; alter table bridge_characters_players add constraint fk_player_id foreign key (player_id) references players (id) ON DELETE CASCADE; alter table bridge_characters_players drop constraint if exists unique_ids; alter table bridge_characters_players add constraint unique_ids unique (character_id, player_id) 
+
+&SCHEMA`STATS [v(sqlDBREF)] = CREATE TABLE IF NOT EXISTS stats ( id SERIAL PRIMARY KEY, name TEXT NULL, parent_id INT ); alter table stats drop constraint if exists fk_parent_id; alter table stats add constraint fk_parent_id foreign key (parent_id) references stats (id); alter table stats drop constraint if exists unique_name; alter table stats add constraint unique_name unique (name);
+
+&WHERE`WHICH_CHARACTER [v(sqlDBREF)] =  [setq(character,sqlescape(%0))][if( isnum(r(character)), characters.id=[r(character)] , dbref = '[if( strmatch(r(character) ,#*) , r(character) , if(pmatch(%0),pmatch(%0),first(lsearch(all, ething, \[match(name(##),*[r(character)]*)\]))) )]' )]
+&WHERE`NAMELIKE [v(sqldbref)] =  [if(strmatch(%0,*"*),lower(name) = '[sqlescape(edit(lcstr(%0),",))]' , lower(name) like '[lcstr(%0)]%%' )]
+
+&GET`Player`ID [v(sqldbref)] =   setr(player_id,if(isnum(%0),%0, if(or(pmatch(%0),strmatch(%0,#*)), u(GET`PLAYER`id.dbref,sqlescape(%0)), u(GET`PLAYER`id.email,sqlescape(%0)))))
+
+&GET`Character`ID [v(sqldbref)] = sql( select id from characters where [u(where`which_character,%0)] )
+&get`stat`id [v(sqldbref)] = if(isnum(%0),%0, sql( select id from stats where [u(where`namelike,%0)] order by id asc limit 1 ))
+
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@
+@@ Creating New Characters
+@@ This system maintains alts by email address: a player submits their email or other identifier
+@@ in a command like "+register jimbo@gmail.com"
+@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+&CHARACTERS`REGISTER_NEW_CHARACTER [v(sheetglobal)] = $+register *:@pemit %#=[prefix()] [if(u(v(db`sql)/characters`GET`is_registered,%#), [u(v(db`sql)/set`player`register_email,%#, sqlescape(%0) )]Your alts have been updated as registered to '[decompose(%0)]'.,[u(v(db`sql)/create`character,%#,%0)] %N has been registered as a new character assigned to '%0'.)]
+
+&CHARACTERS`GET`IS_REGISTERED [v(sqldbref)] = sql( SELECT 1 FROM characters WHERE [u(where`which_character,%0)] )
+
+&SET`PLAYER`REGISTER_EMAIL [v(sqldbref)] = sql( update players set register_email = '[sqlescape(%1)]' where id = [u(GET`PLAYER`id,%0)] )
+
+&CREATE`character [v(sqldbref)] =  sql(insert into bridge_characters_players(character_id, player_id) values ([u(insert`character,%0)], [u(insert`player,%1)] ) on conflict (character_id, player_id) do update set character_id = %0, player_id = %1)
+
+&INSERT`character [v(sqldbref)] = [SETR(charid,sql( insert into characters ([dbref, current_xp, total_xp]) values ('%0' %, 0 %, 0) on conflict (dbref) do update set dbref = '%0' returning id ))][if(%1, sql( insert into bridge_characters_players (character_id%, player_id) values ([r(charid)], [u(get`player`id,npcstaff)]) )]
+
+&INSERT`PLAYER [v(sqldbref)] = sql( insert into players (register_email) values ('[sqlescape(lcstr(%0))]') on conflict (register_email) do update set register_email = '[sqlescape(lcstr(%0))]' returning id )
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@
+@@ Checking Alts
+@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+&CHARACTERS`GET`ALTS.OTHER [v(sheetglobal)] = $+alts *:@assert [isstaff,%#)] = @pemit %#=[error(You are not on a staff account!)];@assert [pmatch(%0)]=@pemit %#=[error(That is not the name of a player character.)];@pemit %#=[heading([name(*%0)]'s Alts)][u(%va/alts`display,%0)]
+
+&CHARACTERS`GET`ALTS.MINE [v(sheetglobal)] = $+alts:@pemit %#=[heading(Your Alts)][u(%va/alts`display,%#)]
+
+&ALTS`DISPLAY [v(sheetfuncs)]=[if(setr(email, u(v(db`sql)/get`player`register_email,%0)), Registered as [ansi(hw, r(email) )], Not registered. )]%R[itemize(iter( u(v(db`sql)/get`player`alts,%0), [name(first(##,~))][u(characters`alts`approval_status, [elements(##,2,~)], [elements(##,3,~)])] ,|,|),|)]
+
+&GET`player`ALTS [v(sqldbref)] =  [sql( select dbref%, approved%, deactivated from characters as a join bridge_characters_players as b on b.character_id = a.id where player_id = [u(get`player`id,%0)],|,~)]
+
+&CHARACTERS`ALTS`APPROVAL_STATUS [v(sheetfuncs)] = [switch([t(%0)][t(%1)],01,ansi(hx,not approved),10,ansi(hg,approved),11,ansi(y,retired) )]
+
+&GET`Player`REGISTER_EMAIL [v(sqldbref)] = sql( select register_email from players where id = [u(GET`PLAYER`id,%0)] )
+
+&GET`PLAYER`IS_STAFF [v(sqldbref)] = sql( select STAFF from characters [u(where`which_character,%0)])
+@startup [v(sqldbref)] = @function IsStaff=[v(sqldbref)]/get`player`is_staff
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@
+@@ Staff Roster
+@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+&Characters`Set`Staff [v(miscglobal)] = $+staff/add *:@assert [isstaff,%#)] = @pemit %#=[error(You are not on a staff account!)];@assert [pmatch(%0)]=@pemit %#=[error(That is not the name of a player character.)];@pemit %#=[prefix()][name(pmatch(%0))]has been added to staff.[u(v(db`sql)/set`character`staff,%0,true)]
+
+&Characters`Delete`Staff [v(miscglobal)] = $+staff/rem* *:@assert [isstaff,%#)] = @pemit %#=[error(You are not on a staff account!)];@assert [pmatch(%1)]=@pemit %#=[error(That is not the name of a player character.)];@pemit %#=[prefix()][name(pmatch(%1))]has been removed from staff.[u(v(db`sql)/set`character`staff,%0,false)]
+
+&cmd`staff [v(miscglobal)] = $+staff: @pemit %#= [heading(Staff)] [iter( u(v(db`sql/get`staff.dbref)) , [bullet()] [name(##)] )]
+
+&set`character`staff [v(sqldbref)] = sql( update characters set staff = [if(%0,TRUE,NULL)] where [u(where`which_character,%0)] )
+
+&get`staff.dbref [v(sqldbref)] = sql( select dbref from characters where staff is true )
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@
+@@ Chargen Skeleton
+@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+@dig/tel Character Generation Room
+th [tel( %#, setr( cgroom, dig( Character Generator)) )][set(me,cgroom:[r(cgroom)])]
+
+@parent here = [v(bigref)]
+@set here = !no_c
+@set here = wizard
+
+@descformat here = [if(hasattr(%#,_cgstage),[u(me/desc`[xget(%#,_cgstage)])][bullet()]Navigate through steps of character generation with "[hilight(back)]" and "[hilight(next)].,u(desc`welcome))]
+
+&desc`welcome here = [space(4)]Welcome to character generation!  Staff, to edit this message such as to supply players with setting and rules information, change the desc`welcome attribute.  %R%R[space(4)]To get started, register an account by typing "[hilight(+register <email>)]". It doesn't have to be a real email address, but it should be the same thing every time you make a new character so you can easily manage your accounts.  If you give us a real email address, we will send emails about server downtime.
+
+&cmd`register here = $+register *: @pemit %#= [prefix()] [if(u(v(db`sql)/characters`GET`is_registered,%#), [u(v(db`sql)/set`player`register_email,%#, sqlescape(%0) )]Your alts have been updated as registered to '[decompose(%0)]'.,[u(v(db`sql)/create`character,%#,%0)] %N has been registered as a new character assigned to '%0'.)][u(v(db`sql)/delete`character`stats,%#)]%R [set(%#,_cgstage:[first(u(stagelist))])][u(desc`[get(%#/_cgstage)])]
+
+&delete`character`stats [v(sqldbref)] = sql( delete from bridge_characters_stats where character_id = [u(get`character`id,%0)] )
+
+&stagelist here=nosystem
+&desc`nosystem here = Your character was successfully registered.  There is no character generation system installed! 
+
+&CMD`PICK here= $pick *:@switch/first 0 = match(v(pickables), get(%#/_cgstage) ),{@pemit %# = [prefix())]The 'pick' command isn't available right now. [u(commands`[get(%#/_cgstage)])]},match( u(fn`get_valid_choices,get(%#/_cgstage),u(v(db`sheet)/characters`get`monster,%#)),*%0*,|),{@pemit %#=[error(Sorry. That's not a valid choice.)] Here are your choices:%R [table( u(fn`get_valid_choices,get(%#/_cgstage)),-20,79,|)] },{@pemit %#=[u(fn`set_character`[get(%#/_cgstage)],%0)][u(derive`[get(%#/_cgstage)],%0)][u(fn`setnextstage)] }
+
+&fn`get_valid_choices here= u(fn`get_valid_choices_%0,%1)
+
+&FN`SETNEXTSTAGE here=[u(derive`[get(%#/_cgstage)])][set(%#,_cgstage:[u(fn`getnextstage)])][pemit(%#,u(desc`[get(%#/_cgstage)]))]
+
+&FN`GETNEXTSTAGE here=[extract(u(me/stagelist),[inc(match( u(me/stagelist),get(%#/_cgstage)))],1)]
+
+&CMD`BACK here= $back: @pemit %#=[u(fn`setprevstage)]
+&fn`getprevstge here= [extract(u(me/stagelist),[max(dec(match( u(me/stagelist),get(%#/_cgstage))),1)],1)]
+
+&CMD`NEXT here= $next:@pemit %#=[if(hasattr(%#,_cgstage),[if(u(check`[get(%#/_cgstage)]),[u(derive`[get(%#/_cgstage)])][u(fn`setnextstage)],u(rules`[get(%#/_CGSTAGE)]))],You aren't in Chargen yet.)]
+
+&FN`SETPREVSTAGE here=[set(%#,_cgstage:[u(fn`getprevstage)])][pemit(%#,[u(desc`[get(%#/_cgstage)])][if(match(first(get(me/stagelist)),get(%#/_cgstage)),%R%R[prefix()][hilight(Trying to leave Character Generation?)] Type "quit" or "out".  You can return at any time.)])]
+
+&fn`maxval here = ulocal(me/maxval`[get(%#/_CGSTage)])
+&fn`minval here = if(hasattr(me,minval`[get(%#/_cgstage)]),lte(get(me/minval`[get(%#/_cgstage)]),%0),1)
+
+&cmd`set_stat here = $set * to *:@assert u(fn`canUseSet)={@pemit %#=[prefix()]This command isn't available right now. [u(commands`[get(%#/_cgstage)])]};@assert u(fn`isAnOption,%0)={@pemit %#=[error()]Sorry! That's not a valid choice. Here are your options: [table( r(choicelist),-20,79,|)]};@assert isnum(%1)={@pemit %#=[error()]Sorry. You need to put a numerical value where you wrote "%1".};@assert gte(%1,0)={@pemit %#=[error()]Sorry. You can't use negative numbers.};@assert lte(%1, u(fn`maxval))={@pemit %#=[error()]Sorry.  The highest value you can pick is [u(fn`maxval)].  Please pick a lower number.};@assert gte u(fn`minval,%1)={@pemit %#=[error()]Sorry. The lowest value you can pick is [u(minval`[get(%#/_cgstage)])]. Please pick a higher number.};@pemit %#=[prefix()]Setting [setr(stat,sqlescape(grab(r(choicelist),%0*,|)))] to %1. [setstat(%#,r(stat), %1)] [if(u(check`[get(%#/_cgstage)]),%R[prefix()]Looks like you're ready to move on. Type "[hilight(next)]" to move to the next stage.)]
+
+&fn`canUseSet here = match(v(settables), get(%#/_cgstage))
+&fn`isAnOption here = match( setr(choicelist,u(fn`get_valid_choices,get(%#/_cgstage),%#)),*%0*,|)
+
+&JOIN`CHARACTERS [v(sqldbref)] = join characters on characters.id = %0.character_id
+&JOIN`PLAYERS [v(sqldbref)] = join players on players.id = %0.player_id
+&JOIN`STAT_PARENTS [v(sqldbref)] = join stats as parents on parents.id = %0.parent_id
+&JOIN`STATS [v(sqldbref)] = join stats on %0.stat_id = stats.id
+&get`stats`first_children [v(sqldbref)] = [sql( select stats.name from stats [u(join`stat_parents,stats)] where lower(parents.name) ='[lcstr(%0)]' ,| )]
+
+&set`character`stat [v(sqldbref)]=if( isnum(%2), sql( insert into bridge_characters_stats (character_id%, stat_id%, value ) values ( [u(get`character`id,%0)], [u(get`stat`id,%1)], %2) on conflict (character_id, stat_id) do update set value = %2 ))
+&get`character`stat [v(sqldbref)]=  lmath(add, sql( select value from bridge_characters_stats as bcs [u(join`stats,bcs)] [u(join`characters,bcs)] where [u(where`which_character,%0)] and [u(where`namelike,%1)] limit 1))
+
+@function setstat =[v(sqldbref)]/set`character`stat
+@function getstat=[v(sqldbref)]/`get`character`stat
+@startup [v(sqldbref)]=@function setstat = [num(me)]/set`character`stat;@function getstat=[num(me)]/get`character`stat
+@trigger [v(sqldbref)]/startup

@@ -1,29 +1,13 @@
 <template>
   <div class="container">
+    <h1>Modern Nights</h1>
+    <p>A 20th Anniversary Edition Classic World of Darkness Game</p>
     <div class="row">
       <Mushclient class="twothirds"/>
       <div class="sidebar third">
         <Helpfiles />
       </div>
     </div>
-  
-  <ul class="example">
-    <li v-for="stat in attributes.physical">
-      {{stat.name}}
-      <input 
-        v-for="n in 5"
-        :id="'attr' + stat.name + n"
-        name="'attr-' + stat.name'"
-        type="radio"
-      />
-      <label
-        v-for="n in 5"
-        :id="'value'+ stat.name + n"
-        :for="'attr' + stat.name + n"
-      > {{n}}
-      </label>
-    </li>
-  </ul>
   </div>
 </template>
 
