@@ -86,6 +86,11 @@
     align-items: space-between;
   }
 
+  b {
+    font-weight: 700;
+    color: var(--text-lighter);
+  }
+
   body, html {
     letter-spacing: .5px;
     height: 100%;

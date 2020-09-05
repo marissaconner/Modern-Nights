@@ -38,7 +38,7 @@ import axios from 'axios';
   .newsfiles {
     margin: 1em;
   }
-  
+
   .newsfiles__list {
     padding-inline-start: 0px; 
   }
