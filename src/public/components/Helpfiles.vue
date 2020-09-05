@@ -1,6 +1,15 @@
 <template>
   <div class="newsfiles">
   <h1>Helpfiles</h1>
+
+  <form>
+    <input type="search" />
+
+    <ul>
+      <li v-for="bucket in buckets">{{bucket}}</li>
+    </ul>
+  </form>
+
   <ul class="newsfiles__list">
     <li v-for="helpfile in helpfiles">
       <h2>{{ helpfile.category }}</h2>
@@ -24,12 +33,16 @@ import axios from 'axios';
     name: 'Helpfiles',
     data () {
       return {
-        helpfiles: {}
+        helpfiles: {},
+        buckets: []
       }
     },
     created() {
        axios.get('/api/helpfiles')
       .then(res => this.helpfiles = res.data)
+
+      axios.get('/api/buckets')
+      .then(res=> this.buckets = res.data)
     }
   }
 </script>
