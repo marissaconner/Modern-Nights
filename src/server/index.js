@@ -27,7 +27,7 @@ app.use('/public/', express.static(path.join(__dirname, '..', 'public')));
 app.get('/api/helpfiles/', (req, res) => {
   helpfileCtrl.getHelpfiles( client, (err, data) => {
     if (err) {
-      res.status(500).error(err)
+      res.status(500).send(err)
     } else {
       res.status(200).send(data)
     }
@@ -37,7 +37,7 @@ app.get('/api/helpfiles/', (req, res) => {
 app.get('/api/newsfiles/', (req, res) => {
   helpfileCtrl.getRulefiles( client, (err, data) => {
     if (err) {
-      res.status(500).error(err)
+      res.status(500).send(err)
     } else {
       res.status(200).send(data)
     }
@@ -47,9 +47,9 @@ app.get('/api/newsfiles/', (req, res) => {
 
 app.get('/api/helpfiles/search/', (req, res) => {
   console.log("Buckets");
-  helpfileCtrl.getBuckets( client, (err, data) => {
+  helpfileCtrl.search( client, req.body.query, (err, data) => {
     if (err) {
-      res.status(500).error(err)
+      res.status(500).send(err)
     } else {
       res.status(200).send(data)
     }
@@ -60,7 +60,7 @@ app.get('/api/helpfiles/buckets/', (req, res) => {
   console.log("Buckets");
   helpfileCtrl.getBuckets( client, (err, data) => {
     if (err) {
-      res.status(500).error(err)
+      res.status(500).send(err)
     } else {
       res.status(200).send(data)
     }
