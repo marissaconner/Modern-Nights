@@ -19,5 +19,16 @@ module.exports = {
         callback(null, data.rows)
       }
     })
+  }, 
+
+  getBuckets: function(client, callback) {
+    const queryString = `select array( select distinct bucket from helpfiles)`
+    client.query(queryString, (err, data) => {
+      if (err) {
+        callback(err, null);
+      } else {
+        callback(null, data)
+      }
+    })
   }
 }
