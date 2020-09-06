@@ -41,6 +41,7 @@ app.get('/api/newsfiles/', (req, res) => {
 });
 
 app.get('/api/helpfiles/buckets/', (req, res) => {
+  console.log("Buckets");
   helpfileCtrl.getBuckets( client, (err, data) => {
     if (err) {
       res.status(500).error(err)

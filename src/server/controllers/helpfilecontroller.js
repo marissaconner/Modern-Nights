@@ -22,12 +22,12 @@ module.exports = {
   }, 
 
   getBuckets: function(client, callback) {
-    const queryString = `select array( select distinct bucket from helpfiles)`
+    const queryString = `select distinct bucket, false as selected from helpfiles`
     client.query(queryString, (err, data) => {
       if (err) {
         callback(err, null);
       } else {
-        callback(null, data)
+        callback(null, data.rows)
       }
     })
   }

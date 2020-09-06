@@ -4,11 +4,11 @@
 
   <form>
     <input type="search" />
-
-    <ul>
-      <li v-for="bucket in buckets">{{bucket}}</li>
-    </ul>
   </form>
+
+  <div v-for="category in buckets">
+    {{category}}
+  </div>
 
   <ul class="newsfiles__list">
     <li v-for="helpfile in helpfiles">
@@ -34,14 +34,14 @@ import axios from 'axios';
     data () {
       return {
         helpfiles: {},
-        buckets: []
+        buckets: [""]
       }
     },
     created() {
        axios.get('/api/helpfiles')
       .then(res => this.helpfiles = res.data)
 
-      axios.get('/api/buckets')
+      axios.get('/api/helpfiles/buckets')
       .then(res=> this.buckets = res.data)
     }
   }
