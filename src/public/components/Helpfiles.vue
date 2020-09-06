@@ -6,8 +6,8 @@
     <input type="search" />
   </form>
 
-  <div v-for="category in buckets">
-    {{category}}
+  <div v-for="(category, index) in buckets">
+    <span @click="toggleFilter" :data-index="index" :data-selected="category.selected">{{category.bucket}} {{category.selected}}</span>
   </div>
 
   <ul class="newsfiles__list">
@@ -34,7 +34,7 @@ import axios from 'axios';
     data () {
       return {
         helpfiles: {},
-        buckets: [""]
+        buckets: []
       }
     },
     created() {
@@ -43,6 +43,12 @@ import axios from 'axios';
 
       axios.get('/api/helpfiles/buckets')
       .then(res=> this.buckets = res.data)
+    },
+    methods: {
+      toggleFilter: function(e) {
+        let idx = e.target.getAttribute('data-index');
+        this.buckets[idx].selected = !this.buckets[idx].selected 
+      }
     }
   }
 </script>
