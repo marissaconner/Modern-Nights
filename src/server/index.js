@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
 const { Client } = require('pg');
+const bodyParser = require('body-parser');
+
 const app = express();
 let http = require('http');
 http = http.Server(app);
@@ -17,6 +19,8 @@ const client = new Client({
 
 client.connect();
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '..', '..', 'dist')));
 app.use('/public/', express.static(path.join(__dirname, '..', 'public')));
 
@@ -32,6 +36,18 @@ app.get('/api/helpfiles/', (req, res) => {
 
 app.get('/api/newsfiles/', (req, res) => {
   helpfileCtrl.getRulefiles( client, (err, data) => {
+    if (err) {
+      res.status(500).error(err)
+    } else {
+      res.status(200).send(data)
+    }
+  })
+});
+
+
+app.get('/api/helpfiles/search/', (req, res) => {
+  console.log("Buckets");
+  helpfileCtrl.getBuckets( client, (err, data) => {
     if (err) {
       res.status(500).error(err)
     } else {
