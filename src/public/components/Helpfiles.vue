@@ -7,8 +7,10 @@
     <input type="submit" @click="search"/>
   </form>
 
-  <div v-for="(category, index) in buckets">
-    <span @click="toggleFilter" :data-index="index" :data-selected="category.selected">{{category.bucket}} {{category.selected}}</span>
+  <div class="newsfiles__taglist">
+    <div v-for="(category, index) in buckets">
+      <span v-bind:class="[category.selected ? 'newsfiles__tag--active' : 'newsfiles__tag--inactive', 'newsfiles__tag', 'button']" @click="toggleFilter" :data-index="index" :data-selected="category.selected">{{category.bucket}}</span>
+    </div>
   </div>
 
   <ul class="newsfiles__list">
@@ -16,7 +18,7 @@
       <h2>{{ helpfile.category }}</h2>
      <ul class="newsfiles__list" v-for="entry in helpfile.entries">
         <li>
-          <h3>{{ entry.name }}</h3>
+          <h3>{{ entry.name }} ({{entry.bucket}})</h3>
           <div v-html="entry.contents" />
         </li>
       </ul>
@@ -26,10 +28,7 @@
 </template>
 
 <script>
-import axios from 'axios';
-
-// The export default syntax is declaring a component 
-// which can be registered and reused later.
+  import axios from 'axios';
   export default {
     name: 'Helpfiles',
     data () {
@@ -66,6 +65,32 @@ import axios from 'axios';
 <style scoped>
   .newsfiles {
     margin: 1em;
+  }
+
+  .newsfiles__taglist {
+    display: flex;
+    justify-content: space-between;
+    margin: 1em 0;
+  }
+
+  .newsfiles__tag {
+
+  }
+
+  .newsfiles__tag--active {
+    background: linear-gradient(145deg, transparent, var(--main-bg-darker));
+    box-shadow: inset 2px 2px 4px var(--lowlight),
+                inset -3px -3px 4px var(--highlight);
+    transition: all .25s ease-in-out;
+  
+  }
+
+  .newsfiles__tag--inactive {
+    background: linear-gradient(145deg, transparent, var(--main-bg-darker));
+    box-shadow: 3px 3px 4px var(--lowlight),
+                -3px -3px 4px var(--highlight);
+    transition: all .25s ease-in-out;
+    color: var(--main-bg-lighter);
   }
 
   .newsfiles__list {

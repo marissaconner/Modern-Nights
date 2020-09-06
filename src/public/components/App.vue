@@ -57,7 +57,14 @@
     --text: #ccc;
     --text-lighter: #eee;
     --buttonbg: #175f8a;
+    --bg-green: #464;
     --buttonbg-hover: #1a6b9b;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0; 
   }
 
   .container {
@@ -86,6 +93,11 @@
 
   h1, h2, h3, h4, h5, h6 {
     color: var(--text-lighter);
+    margin-top: 1.5em;
+  }
+
+  p {
+    margin: .5em 0;
   }
 
   input[type=text], textarea {
@@ -103,6 +115,7 @@
   }
 
   .button, button {
+    box-sizing: border-box;
     border-radius: 5px;
     text-align: center;
     background-color: var(--buttonbg);
