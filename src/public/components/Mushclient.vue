@@ -91,7 +91,7 @@ var Convert = require('ansi-to-html');
         };
 
         this.socket.onerror = function (evt) {
-          component.messageBuffer.push(evt);
+          component.messageBuffer.push("There was an error connecting to the game server.  It may be down!");
         };
 
         this.socket.onclose = function (evt) {
