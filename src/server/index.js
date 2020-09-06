@@ -40,6 +40,16 @@ app.get('/api/newsfiles/', (req, res) => {
   })
 });
 
+app.get('/api/helpfiles/buckets/', (req, res) => {
+  helpfileCtrl.getBuckets( client, (err, data) => {
+    if (err) {
+      res.status(500).error(err)
+    } else {
+      res.status(200).send(data)
+    }
+  })
+});
+
 app.get('*', (req, res) => {
   console.log("Get request recieved")
   res.sendFile(path.join(__dirname, '..', '..', 'index.html'));
