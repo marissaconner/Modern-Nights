@@ -46,8 +46,7 @@ app.get('/api/newsfiles/', (req, res) => {
 
 
 app.get('/api/helpfiles/search/', (req, res) => {
-  console.log("Buckets");
-  helpfileCtrl.search( client, req.body.query, (err, data) => {
+  helpfileCtrl.search( client, req.query.search, (err, data) => {
     if (err) {
       res.status(500).send(err)
     } else {

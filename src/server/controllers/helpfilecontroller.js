@@ -10,12 +10,12 @@ module.exports = {
     })
   },
 
-  search: function(client, input, callback) {
+  search: function(client, input="", callback) {
     let  searchString = input.replace(/\W/g, '').toLowerCase();
-
-    const queryString = `select json_agg( json_build_object('name', name, 'contents', contents)) as entries from helpfiles where lower(contents) like '%%${searchString}%%' group by category order by category asc)`;
+    const queryString = `select category, json_agg( json_build_object('name', name, 'contents', contents)) as entries from helpfiles where lower(contents) like '%%${searchString}%%' group by category`;
     client.query(queryString, (err, data) => {
       if (err) {
+        console.log(err);
         callback(err, null);
       } else {
         callback(null, data.rows)

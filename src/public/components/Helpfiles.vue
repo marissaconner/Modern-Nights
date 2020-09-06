@@ -2,8 +2,9 @@
   <div class="newsfiles">
   <h1>Helpfiles</h1>
 
-  <form>
-    <input type="search" />
+  <form @submit.prevent="onSubmit">
+    <input v-model="query" type="search" />
+    <input type="submit" @click="search"/>
   </form>
 
   <div v-for="(category, index) in buckets">
@@ -34,7 +35,8 @@ import axios from 'axios';
     data () {
       return {
         helpfiles: {},
-        buckets: []
+        buckets: [],
+        query: "Search"
       }
     },
     created() {
@@ -42,12 +44,20 @@ import axios from 'axios';
       .then(res => this.helpfiles = res.data)
 
       axios.get('/api/helpfiles/buckets')
-      .then(res=> this.buckets = res.data)
+      .then(res => this.buckets = res.data)
     },
     methods: {
       toggleFilter: function(e) {
         let idx = e.target.getAttribute('data-index');
         this.buckets[idx].selected = !this.buckets[idx].selected 
+      },
+      search: function() {
+        axios.get('/api/helpfiles/search', {
+          params: { 
+           search: this.query
+          }
+        })
+        .then( res => this.helpfiles = res.data )
       }
     }
   }
