@@ -6,15 +6,15 @@ const bodyParser = require('body-parser');
 const app = express();
 let http = require('http');
 http = http.Server(app);
-const { user, host, database, port, password } = require('./config.js');
+
 const helpfileCtrl = require('./controllers/helpfilecontroller.js');
 
 const client = new Client({
-  user,
-  host,
-  database,
-  password,
-  port
+  user: process.env.USER,
+  host: process.env.HOST,
+  database: process.env.DATABASE,
+  password: process.env.PASSWORD,
+  port: process.env.PORT
 });
 
 client.connect();
