@@ -10,7 +10,7 @@
     </div>
 
     <div class="client__input">
-      <textarea class="neu__element--inset" v-on:keyup="handleKeyup" v-model="input" />
+      <textarea v-on:keyup="handleKeyup" v-model="input" />
       <span class="button button--block" @click=sendMessage>send</span>
     </div>
   </div>
@@ -125,10 +125,13 @@ var Convert = require('ansi-to-html');
   .client {
     width: 800px;
     max-width: 800px;
+    margin: 0 auto;
     height: 600px;
     max-height: 720px;
     font-family: 'Courier Prime', monospace;
     flex-direction: column;
+    background-color: var(--neu-bg);
+    color: #fcfcfc;
   }
 
   .client pre {
@@ -161,14 +164,14 @@ var Convert = require('ansi-to-html');
     box-sizing: border-box;
     padding: 8px;
     margin: 0;
-    border: none;
+    border: 2px solid var(--border-color);
     margin: .5em 0;
   }
 
    .client__input textarea:focus {
     outline: none;
-    border: none;
-    background: var(--main-bg-lighter);
+    border: 2px solid var(--highlight);
+    box-shadow: 0px 0px 0px 3px var(--highlight);
   }
 
   #client__scroller * {
