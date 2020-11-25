@@ -1,6 +1,7 @@
 import {html, css} from 'lit-element'
 import {classMap} from 'lit-html/directives/class-map'
-import {Root} from './root.lit.js'
+import {Root} from '../root.lit.js'
+import {SharedFormStyles} from './formcontrol.lit.js'
 
 class Checkbox extends Root {
   constructor() {
@@ -10,7 +11,8 @@ class Checkbox extends Root {
   static get styles () {
     return [
       super.styles,
-      style
+      SharedFormStyles,
+     style,
     ]
   }
 
@@ -74,15 +76,6 @@ class Checkbox extends Root {
 }
 
 const style = css`
-  .form__control {
-    margin: 0.5rem;
-  }
- 
-  .form__control label {
-    cursor: pointer;
-    cursor: hand;
-  }
-
   .form__checkbox input[type="checkbox"] {
     position: absolute;
     opacity: 0;
@@ -117,6 +110,7 @@ const style = css`
     display: inline-block;
     margin-right: var(--size-sm);
     border-radius: var(--border-radius);
+    border-width: 1px;
     box-sizing: border-box;
     border-style: solid;
     border-color: var(--color-primary);
@@ -126,12 +120,12 @@ const style = css`
   .form__checkgraphic:after {
     content: "";
     position: absolute;
-    left: var(--size-xxs);
+    left: var(--size-xs);
     bottom: var(--size-xxxs);
-    width: 5px;
-    height: 10px;
+    width: var(--size-xxxs);
+    height: var(--size-sm);
     border: solid var(--color-background);
-    border-width: 0 3px 3px 0;
+    border-width: 0 2px 2px 0;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);

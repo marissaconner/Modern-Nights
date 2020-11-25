@@ -2,10 +2,14 @@
   <div class="newsfiles">
   <h1>Rules And Help</h1>
   <form @submit.prevent="onSubmit">
-    <input v-model="query" type="search" />
-    <input type="submit" @click="search"/>
+    <modern-searchbar
+      v-model="query"
+    >
+      Search
+    </modern-searchbar>
   </form>
 
+  <h2>Filters</h2>
   <div class="newsfiles__filterlist">
     <div v-for="(category, index) in buckets">
       <modern-checkbox
@@ -35,7 +39,9 @@
 
 <script>
   import axios from 'axios';
-  import '../elements/checkbox.lit.js'
+  import '../elements/forms/checkbox.lit.js'
+  import '../elements/forms/searchbar.lit.js'
+
   export default {
     name: 'Helpfiles',
     data () {
@@ -106,22 +112,6 @@
     opacity: 0;
     overflow-y: hidden;
     transition: all .25s ease-in-out;
-  }
-
-  .newsfiles__filter--active {
-    background: black;
-    background: linear-gradient(145deg, transparent, var(--main-bg-darker));
-    box-shadow: inset 2px 2px 4px var(--lowlight),
-                inset -3px -3px 4px var(--highlight);
-    transition: all .25s ease-in-out;
-  }
-
-  .newsfiles__filter--inactive {
-    background: linear-gradient(145deg, transparent, var(--main-bg-darker));
-    box-shadow: 3px 3px 4px var(--lowlight),
-                -3px -3px 4px var(--highlight);
-    transition: all .25s ease-in-out;
-    color: var(--main-bg-lighter);
   }
 
   .newsfiles__list {

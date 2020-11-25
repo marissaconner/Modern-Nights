@@ -75,7 +75,7 @@ const reset = css`
     --size-xxxl: ${unsafeCSS(sizexxxl)};
 
     --effect-focus: 0 0 0 3px var(--color-accent);
-    --border-radius: var(--size-xs);
+    --border-radius: var(--size-xxxs);
 
     * {
       margin: 0;
