@@ -9,11 +9,12 @@
   <div class="newsfiles__filterlist">
     <div v-for="(category, index) in buckets">
       <modern-checkbox
+        v-on:modern-checkbox-toggle="toggleFilter(category.bucket)"
+        @click.prevent
         :id="category.bucket"
-        @click="toggleFilter"
         :data-index="index"
         :data-name="category.bucket"
-        :checkmark="category.selected"
+        :checkmark="buckets[index].selected"
       >
         {{category.bucket}}
       </modern-checkbox>
@@ -48,7 +49,6 @@
     created() {
        axios.get('/api/helpfiles')
       .then(res => this.helpfiles = res.data)
-
       axios.get('/api/helpfiles/buckets')
       .then((res) => {
         this.buckets = res.data
@@ -59,9 +59,10 @@
       })
     },
     methods: {
-      toggleFilter: function(e) {
-        let idx = e.target.getAttribute('data-index');
-        let key = e.target.getAttribute('data-name');
+      toggleFilter: function(id) {
+        const e = document.querySelector(`#${id}`);
+        let idx = e.getAttribute('data-index');
+        let key = e.getAttribute('data-name');
         let boolean = !this.buckets[idx].selected
         this.buckets[idx].selected = boolean;
         if( boolean ) {

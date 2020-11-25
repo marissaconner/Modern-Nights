@@ -21,6 +21,26 @@ class Checkbox extends Root {
     }
   }
 
+  handleClick (event) {
+    const item = event.target
+    if (!item.disabled) {
+      const onCheckboxToggle = new CustomEvent('modern-checkbox-toggle', {
+        detail: { id: this.id },
+        bubbles: true,
+        composed: true
+      })
+      this.dispatchEvent(onCheckboxToggle)
+    }
+  }
+
+  firstUpdated () {
+    this.addEventListener('click', this.handleClick)
+  }
+
+  disconnectedCallback () {
+    this.removeEventListener('click', this.handleClick)
+  }
+
   connectedCallback () {
     if (!this.id) {
       console.error('HEY! Give this checkbox an ID!')
@@ -34,7 +54,6 @@ class Checkbox extends Root {
     <div class="form__control">
       <div class="form__checkbox">
         <input
-          aria-label="show topics in ${this.label} category"
           type="checkbox"
           id="${this.id}"
         />
