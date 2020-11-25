@@ -25,15 +25,15 @@ const heightxxl = `${scale(3)}rem`;
 const heightxxxl = `${scale(4)}rem`;
 const heightxxxxl = `${scale(5)}rem`;
 
-const sizexxxs = `${baselineText / 5}rem`;
-const sizexxs = `${baselineText / 4}rem`;
-const sizexs = `${baselineText / 3}rem`;
-const sizesm = `${baselineText / 2}rem`;
-const sizemd = `${baselineText}rem`;
-const sizelg = `${baselineText * 2}rem`;
-const sizexl = `${baselineText * 3}rem`;
-const sizexxl = `${baselineText * 4}rem`;
-const sizexxxl = `${baselineText * 5}rem`;
+const sizexxxs = `${size / 5}rem`;
+const sizexxs = `${size / 4}rem`;
+const sizexs = `${size / 3}rem`;
+const sizesm = `${size / 2}rem`;
+const sizemd = `${size}rem`;
+const sizelg = `${size * 2}rem`;
+const sizexl = `${size * 3}rem`;
+const sizexxl = `${size * 4}rem`;
+const sizexxxl = `${size * 5}rem`;
 
 // language=CSS
 const reset = css`
@@ -73,6 +73,9 @@ const reset = css`
     --size-xl: ${unsafeCSS(sizexl)};
     --size-xxl: ${unsafeCSS(sizexxl)};
     --size-xxxl: ${unsafeCSS(sizexxxl)};
+
+    --effect-focus: 0 0 0 3px var(--color-accent);
+    --border-radius: var(--size-xs);
 
     * {
       margin: 0;

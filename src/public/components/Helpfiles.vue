@@ -6,30 +6,17 @@
     <input type="submit" @click="search"/>
   </form>
 
-   <custom-element></custom-element>
-
   <div class="newsfiles__filterlist">
     <div v-for="(category, index) in buckets">
-    <div class="form__control">
-      <div class="form__checkbox">
-        <input
-          :aria-label="'show topics in ' + category.bucket + ' category'" 
-          type="checkbox" checked
-          :id="category.bucket"
-          @click="toggleFilter"
-          :data-index="index"
-          :data-name="category.bucket"
-        />
-        <label :for="category.bucket">
-          <span 
-            v-bind:class="[category.selected ? 'Checked' : 'Unchecked', 'form__checkgraphic']">
-          </span>
-          <span class="form__label">{{category.bucket}}</span>
-        </label>
-        
-      </div>
-    </div>
-
+      <modern-checkbox
+        :id="category.bucket"
+        @click="toggleFilter"
+        :data-index="index"
+        :data-name="category.bucket"
+        :checkmark="category.selected"
+      >
+        {{category.bucket}}
+      </modern-checkbox>
     </div>
   </div>
   <ul class="newsfiles__list">
@@ -47,7 +34,7 @@
 
 <script>
   import axios from 'axios';
-  import {CustomElement} from '../elements/test.lit.js'
+  import '../elements/checkbox.lit.js'
   export default {
     name: 'Helpfiles',
     data () {
@@ -92,19 +79,6 @@
         .then( res => this.helpfiles = res.data )
       }
     },
-    /* computed: {
-      filteredfiles: function() {
-        if(!this.isMounted) {
-          return;
-        }
-        
-        return this.helpfiles.map((category) => {
-          return category.entries.filter((thisCat) => {
-            return this.actives[thisCat.bucket] === undefined 
-          })
-        })  
-      }
-    } */
   }
 </script>
 
