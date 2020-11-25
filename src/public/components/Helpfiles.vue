@@ -7,11 +7,27 @@
   </form>
   <div class="newsfiles__filterlist">
     <div v-for="(category, index) in buckets">
-      <input type="checkbox" checked
-        :id="category.bucket"
-        v-bind:class="[category.selected ? 'newsfiles__filter--active' : 'newsfiles__filter--inactive', 'newsfiles__filter']"
-        @click="toggleFilter" :data-index="index" :data-name="category.bucket" />
-      <label :for="category.bucket">{{category.bucket}}</label>
+
+    <div class="form__control">
+      <div class="form__checkbox">
+        <input
+          :aria-label="'show topics in ' + category.bucket + ' category'" 
+          type="checkbox" checked
+          :id="category.bucket"
+          @click="toggleFilter"
+          :data-index="index"
+          :data-name="category.bucket"
+        />
+        <label :for="category.bucket">
+          <span 
+            v-bind:class="[category.selected ? 'Checked' : 'Unchecked', 'form__checkgraphic']">
+          </span>
+          <span class="form__label">{{category.bucket}}</span>
+        </label>
+        
+      </div>
+    </div>
+
     </div>
   </div>
   <ul class="newsfiles__list">
@@ -89,7 +105,8 @@
   }
 </script>
 
-<style scoped>
+<style>
+
   .newsfiles {
     margin: 1em;
   }
@@ -131,9 +148,5 @@
 
   .newsfiles__list {
     padding-inline-start: 0px; 
-  }
-    
-  ul li {
-    list-style-type: none;
   }
 </style>

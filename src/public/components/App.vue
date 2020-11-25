@@ -49,6 +49,7 @@
     --main-bg: #fcfcfc;
     --neu-bg: #5c1f1b;
     --neu-fade: #83231e;
+    --focus-effect: 0 0 0 3px var(--highlight);
     --main-bg-lighter: #fefefe; 
     --lowlight: #3e1d1b;
     --highlight: #aa231f;
@@ -58,12 +59,83 @@
     --buttonlabel: #fcfcfc;
     --buttonbg-hover: #AA0011;
     --border-color: #212121;
+    --border-radius: 3px;
   }
 
   * {
     box-sizing: border-box;   
     margin: 0;
     padding: 0; 
+  }
+
+  .form__control {
+    margin: 0.5rem;
+  }
+ 
+  .form__control label {
+    cursor: pointer;
+    cursor: hand;
+  }
+
+  .form__checkbox input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    height: 0;
+    width: 0;
+  }
+
+  .form__checkbox {
+    cursor: pointer;
+    cursor: hand;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  .form__checkbox label {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    border-radius: var(--border-radius);
+  }
+
+  .form__checkbox input[type="checkbox"]:focus ~ label {
+    box-shadow: var(--focus-effect);
+  }
+
+  .form__checkgraphic {
+    height: 25px;
+    width: 25px;
+    display: inline-block;
+    margin-right: 5px;
+    border-radius: 2px;
+    box-sizing: border-box;
+    border-style: solid;
+    border-color: var(--buttonbg);
+    background-color: var(--buttonbg);
+    position: relative;
+  }
+
+  .form__checkgraphic:after {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 1px;
+    width: 5px;
+    height: 10px;
+    border: solid #fcfcfc;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+
+  .form__checkgraphic.Checked {
+    background-color: var(--buttonbg);
+  }
+  .form__checkgraphic.Unchecked {
+    background-color: #fcfcfc;
   }
 
   .container {
@@ -127,6 +199,10 @@
 
   .button:hover, button:hover {
     background-color: var(--buttonbg-hover);
+  }
+
+  ul li {
+    list-style-type: none;
   }
 
   .button--block {
