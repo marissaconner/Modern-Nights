@@ -2,12 +2,13 @@ const express = require('express');
 const path = require('path');
 const { Client } = require('pg');
 const bodyParser = require('body-parser');
+const { user, host, database, port, password } = require('./config.js');
 
 const app = express();
+const helpfileCtrl = require('./controllers/helpfilecontroller.js');
+
 let http = require('http');
 http = http.Server(app);
-const { user, host, database, port, password } = require('./config.js');
-const helpfileCtrl = require('./controllers/helpfilecontroller.js');
 
 const client = new Client({
   user,
