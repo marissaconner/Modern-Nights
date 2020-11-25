@@ -5,9 +5,11 @@
     <input v-model="query" type="search" />
     <input type="submit" @click="search"/>
   </form>
+
+   <custom-element></custom-element>
+
   <div class="newsfiles__filterlist">
     <div v-for="(category, index) in buckets">
-
     <div class="form__control">
       <div class="form__checkbox">
         <input
@@ -45,6 +47,7 @@
 
 <script>
   import axios from 'axios';
+  import {CustomElement} from '../elements/test.lit.js'
   export default {
     name: 'Helpfiles',
     data () {
