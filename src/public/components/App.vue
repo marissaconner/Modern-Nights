@@ -3,10 +3,7 @@
     <h1>Modern Nights</h1>
     <p>A 20th Anniversary Edition Classic World of Darkness Game</p>
     <div class="row">
-      <Mushclient class="twothirds"/>
-      <div class="sidebar third">
-        <Helpfiles />
-      </div>
+      <Mushclient/>
     </div>
   </div>
 </template>
@@ -49,16 +46,18 @@
 
 <style>
   :root {
-    --main-bg: #333;
-    --main-bg-darker: #222;
-    --main-bg-lighter: #444; 
-    --lowlight: #111;
-    --highlight: #555;
-    --text: #ccc;
-    --text-lighter: #eee;
-    --buttonbg: #175f8a;
-    --bg-green: #464;
-    --buttonbg-hover: #1a6b9b;
+    --main-bg: #fcfcfc;
+    --neu-bg: #5c1f1b;
+    --neu-fade: #83231e;
+    --main-bg-lighter: #fefefe; 
+    --lowlight: #3e1d1b;
+    --highlight: #aa231f;
+    --text: #212121;
+    --text-lighter: #990011;
+    --buttonbg: #990011;
+    --buttonlabel: #fcfcfc;
+    --buttonbg-hover: #AA0011;
+    --border-color: #212121;
   }
 
   * {
@@ -115,11 +114,12 @@
   }
 
   .button, button {
+    font-family: "Montserrat", sans-serif;
     box-sizing: border-box;
     border-radius: 5px;
     text-align: center;
     background-color: var(--buttonbg);
-    color: var(--text);
+    color: var(--buttonlabel);
     padding: .5em;
     cursor: pointer;
     cursor: hand;
@@ -134,14 +134,14 @@
   }
 
   .neu__element--inset {
-    background: linear-gradient(145deg, transparent, var(--main-bg-darker));
+    background: linear-gradient(145deg, transparent, var(--neu-fade));
     box-shadow: inset 2px 2px 4px var(--lowlight),
                 inset -3px -3px 4px var(--highlight);
     transition: all .25s ease-in-out;
   }
 
   .neu__element--outset {
-    background: linear-gradient(145deg, transparent, var(--main-bg-darker));
+    background: linear-gradient(145deg, transparent, var(--neu-fade));
     box-shadow: 3px 3px 4px var(--lowlight),
                 -3px -3px 4px var(--highlight);
     transition: all .25s ease-in-out;
