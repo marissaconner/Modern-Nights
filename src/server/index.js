@@ -11,11 +11,11 @@ let http = require('http');
 http = http.Server(app);
 
 const client = new Client({
-  user: process.env.USER,
-  host: process.env.HOST,
-  database: process.env.DATABASE,
-  password: process.env.PASSWORD,
-  port: process.env.PORT
+  user,
+  host,
+  database,
+  password,
+  port
 });
 
 client.connect();

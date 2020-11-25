@@ -111,7 +111,7 @@
   }
 
   .newsfiles__tag--active {
-    background: linear-gradient(145deg, transparent, var(--main-bg-darker));
+    background: black;
     box-shadow: inset 2px 2px 4px var(--lowlight),
                 inset -3px -3px 4px var(--highlight);
     transition: all .25s ease-in-out;
