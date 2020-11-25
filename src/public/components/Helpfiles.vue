@@ -3,7 +3,8 @@
   <h1>Rules And Help</h1>
   <form @submit.prevent="onSubmit">
     <modern-searchbar
-      v-model="query"
+      v-on:modern-searchbar-input="search()"
+      id="news-help-search"
     >
       Search
     </modern-searchbar>

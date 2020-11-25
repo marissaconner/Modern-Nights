@@ -19,7 +19,16 @@ class SearchBar extends Root {
   static get properties () {
     return {
       id: { type: String },
-    }
+     }
+  }
+
+  handleInput () {
+    const onSearchInput = new CustomEvent('modern-searchbar-input', {
+      detail: { query: this.query },
+      bubbles: true,
+      composed: true
+    })
+    this.dispatchEvent(onSearchInput)
   }
 
   connectedCallback () {
@@ -28,6 +37,14 @@ class SearchBar extends Root {
     }
     this.label = this.textContent.trim()
     super.connectedCallback()
+  }
+
+  firstUpdated () {
+    this.addEventListener('click', this.handleInput)
+  }
+
+  disconnectedCallback () {
+    this.removeEventListener('click', this.handleInput)
   }
 
   render() {
