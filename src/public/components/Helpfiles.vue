@@ -78,6 +78,7 @@
         }
       },
       search: function() {
+        console.log("search");
         axios.get('/api/helpfiles/search', {
           params: { 
            search: this.query

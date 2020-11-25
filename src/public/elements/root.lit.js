@@ -74,13 +74,8 @@ const reset = css`
     --size-xxl: ${unsafeCSS(sizexxl)};
     --size-xxxl: ${unsafeCSS(sizexxxl)};
 
-    --effect-focus: 0 0 0 3px var(--color-accent);
+    --effect-focus: 0 0 0 2px var(--color-accent);
     --border-radius: var(--size-xxxs);
-
-    * {
-      margin: 0;
-      padding: 0;
-    }
 
     h1, h2, h3, h4, h5, h6 {
       line-height: ${unsafeCSS(baselineDisplay)};

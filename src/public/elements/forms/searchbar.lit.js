@@ -51,7 +51,6 @@ class SearchBar extends Root {
 }
 
 const style = css`
-
   .form__control input[type="submit"] {
     color: var(--color-background);
     background-color: var(--color-primary);
