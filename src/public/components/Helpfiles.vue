@@ -1,14 +1,17 @@
 <template>
   <div class="newsfiles">
   <h1>Rules And Help</h1>
-
   <form @submit.prevent="onSubmit">
     <input v-model="query" type="search" />
     <input type="submit" @click="search"/>
   </form>
-  <div class="newsfiles__taglist">
+  <div class="newsfiles__filterlist">
     <div v-for="(category, index) in buckets">
-      <span v-bind:class="[category.selected ? 'newsfiles__tag--active' : 'newsfiles__tag--inactive', 'newsfiles__tag', 'button']" @click="toggleFilter" :data-index="index" :data-name="category.bucket">{{category.bucket}}</span>
+      <input type="checkbox" checked
+        :id="category.bucket"
+        v-bind:class="[category.selected ? 'newsfiles__filter--active' : 'newsfiles__filter--inactive', 'newsfiles__filter']"
+        @click="toggleFilter" :data-index="index" :data-name="category.bucket" />
+      <label :for="category.bucket">{{category.bucket}}</label>
     </div>
   </div>
   <ul class="newsfiles__list">
@@ -91,7 +94,7 @@
     margin: 1em;
   }
 
-  .newsfiles__taglist {
+  .newsfiles__filterlist {
     display: flex;
     justify-content: space-between;
     margin: 1em 0;
@@ -110,14 +113,15 @@
     transition: all .25s ease-in-out;
   }
 
-  .newsfiles__tag--active {
+  .newsfiles__filter--active {
     background: black;
+    background: linear-gradient(145deg, transparent, var(--main-bg-darker));
     box-shadow: inset 2px 2px 4px var(--lowlight),
                 inset -3px -3px 4px var(--highlight);
     transition: all .25s ease-in-out;
   }
 
-  .newsfiles__tag--inactive {
+  .newsfiles__filter--inactive {
     background: linear-gradient(145deg, transparent, var(--main-bg-darker));
     box-shadow: 3px 3px 4px var(--lowlight),
                 -3px -3px 4px var(--highlight);
