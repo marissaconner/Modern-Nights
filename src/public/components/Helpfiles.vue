@@ -33,7 +33,7 @@
           <li
             class="newsfiles__list"
             v-for="(entry, index) in helpfile.entries"
-            v-bind:class="[ filters[entry.bucket] === true ? 'newsfiles__entry' : 'newsfiles__entry--hidden']"
+            v-bind:class="[ filters[entry.bucket] === true ? 'newsfiles__entry' : 'newsfiles__entry Hidden']"
           >
             <modern-accordion
               :title="entry.name"
@@ -117,5 +117,11 @@
     justify-content: space-between;
     margin: 1em 0;
   }
+
+  .newsfiles__entry.Hidden {
+    display: none;
+  }
+
+
 
 </style>
