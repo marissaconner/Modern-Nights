@@ -45,7 +45,6 @@
 </script>
 
 <style>
-
   * {
     box-sizing: border-box;   
     margin: 0;
@@ -64,20 +63,20 @@
 
   b {
     font-weight: 700;
-    color: var(--text-lighter);
+    color: var(--font-color-text);
   }
 
   body, html {
     letter-spacing: .5px;
     height: 100%;
     max-height: 100%;
-    background-color: var(--main-bg);
-    color: var(--text);
+    background-color: #fcfcfc;
+    color: #212121;
     font-family: "Montserrat", sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    color: var(--text-lighter);
+    color: #83231e;
     margin-top: 1.5em;
   }
 
@@ -88,15 +87,15 @@
   input[type=text], textarea {
     border-radius: 5px;
     padding: 5px;
-    color: var(--text);
+    color: #212121;
   }
 
   .third {
-    width: 33%
+    width: 33%;
   }
 
   .twothirds {
-    width: 66%
+    width: 66%;
   }
 
   .button, button {
@@ -104,15 +103,15 @@
     box-sizing: border-box;
     border-radius: 5px;
     text-align: center;
-    background-color: var(--buttonbg);
-    color: var(--buttonlabel);
+    background-color: #212121;
+    color: #fcfcfc;
     padding: .5em;
     cursor: pointer;
     cursor: hand;
   }
 
   .button:hover, button:hover {
-    background-color: var(--buttonbg-hover);
+    background-color: black;
   }
 
   ul li {
@@ -123,17 +122,4 @@
     display: block; 
   }
 
-  .neu__element--inset {
-    background: linear-gradient(145deg, transparent, var(--neu-fade));
-    box-shadow: inset 2px 2px 4px var(--lowlight),
-                inset -3px -3px 4px var(--highlight);
-    transition: all .25s ease-in-out;
-  }
-
-  .neu__element--outset {
-    background: linear-gradient(145deg, transparent, var(--neu-fade));
-    box-shadow: 3px 3px 4px var(--lowlight),
-                -3px -3px 4px var(--highlight);
-    transition: all .25s ease-in-out;
-  }
 </style>

@@ -39,7 +39,6 @@ var Convert = require('ansi-to-html');
       const serverProto = serverSSL ? "wss://" : "ws://";
       const serverUrl = `${serverProto}jetownersanonymous.com:1777/wsclient`;
       let conn = this.connect(serverUrl);
-
     },
     methods: {
       handleKeyup: function(e) {
@@ -130,8 +129,9 @@ var Convert = require('ansi-to-html');
     max-height: 720px;
     font-family: 'Courier Prime', monospace;
     flex-direction: column;
-    background-color: var(--neu-bg);
+    background-color: #5c1f1b;
     color: #fcfcfc;
+    border-radius: 3px;
   }
 
   .client pre {
@@ -164,14 +164,14 @@ var Convert = require('ansi-to-html');
     box-sizing: border-box;
     padding: 8px;
     margin: 0;
-    border: 2px solid var(--border-color);
+    border: 1px solid #212121;
     margin: .5em 0;
   }
 
    .client__input textarea:focus {
     outline: none;
-    border: 2px solid var(--highlight);
-    box-shadow: 0px 0px 0px 3px var(--highlight);
+    border: 2px solid #212121;
+    box-shadow: 0px 0px 0px 3px #212121;
   }
 
   #client__scroller * {
