@@ -23,8 +23,20 @@ class SearchBar extends Root {
   }
 
   handleInput () {
+    const query = this.shadowRoot.querySelector(`#${this.id}-input`).value
     const onSearchInput = new CustomEvent('modern-searchbar-input', {
-      detail: { query: this.query },
+      detail: { query },
+      bubbles: true,
+      composed: true
+    })
+    this.dispatchEvent(onSearchInput)
+  }
+
+  handleSubmit (e) {
+    e.preventDefault()
+    const query = this.shadowRoot.querySelector(`#${this.id}-submit-button`).value
+    const onSearchInput = new CustomEvent('modern-searchbar-submit', {
+      detail: { id: this.id },
       bubbles: true,
       composed: true
     })
@@ -40,29 +52,34 @@ class SearchBar extends Root {
   }
 
   firstUpdated () {
-    this.addEventListener('click', this.handleInput)
+    this.addEventListener('input', this.handleInput)
+    this.addEventListener('onsubmit', this.handleSubmit)
   }
 
   disconnectedCallback () {
-    this.removeEventListener('click', this.handleInput)
+    this.removeEventListener('input', this.handleInput)
+    this.removeEventListener('onsubmit', this.handleSubmit)
   }
 
   render() {
     return html`
-    <div class="form__control">
-      <label for="${this.id}">
-          ${this.label}
-       </label>
-      <div class="form__searchbar">
-        <input
-          type="search"
-          id="${this.id}"
-        />
-        <input
-          type="submit"
-        >
+    <form @submit="${this.handleSubmit}">
+      <div class="form__control">
+        <label for="${this.id}">
+            ${this.label}
+         </label>
+        <div class="form__searchbar">
+          <input
+            type="search"
+            id="${this.id}-input"
+          />
+          <input
+            id="${this.id}-submit-button"
+            type="submit"
+          >
+        </div>
       </div>
-    </div>
+    </form>
     `
   }
 }

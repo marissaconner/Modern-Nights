@@ -1,15 +1,15 @@
 <template>
   <div class="newsfiles">
   <h1>Rules And Help</h1>
-  <form @submit.prevent="onSubmit">
-    <modern-searchbar
-      v-on:modern-searchbar-input="search()"
-      id="news-help-search"
-    >
-      Search
-    </modern-searchbar>
-  </form>
 
+  <modern-searchbar
+    id="news-help-search"
+    v-on:modern-searchbar-submit="submitQuery"
+    v-on:modern-searchbar-input="updateQuery"
+  >
+    Search
+  </modern-searchbar>
+      
   <h2>Filters</h2>
   <div class="newsfiles__filterlist">
     <div v-for="(category, index) in buckets">
@@ -78,8 +78,13 @@
           delete this.filters[key]
         }
       },
-      search: function() {
+      updateQuery: function(e) {
+        console.log("updating query")
+        this.query = e.detail.query;
+      },
+      submitQuery: function(e) {
         console.log("search");
+        console.log(this.query);
         axios.get('/api/helpfiles/search', {
           params: { 
            search: this.query
@@ -92,7 +97,6 @@
 </script>
 
 <style>
-
   .newsfiles {
     margin: 1em;
   }
