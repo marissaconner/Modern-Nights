@@ -5,6 +5,7 @@ module.exports = {
       if (err) {
         callback(err, null);
       } else {
+        console.log( data.rows )
         callback(null, data.rows)
       }
     })

@@ -50,6 +50,8 @@ const reset = css`
     --color-accent-light: #343334;
     --color-accent-dark: #000000;
 
+    --color-grey: #f0f0f0;
+
     --color-caution: #e62325;
     --color-success: #175d8d;
     --color-error: var(--color-caution);
